@@ -1,0 +1,28 @@
+#!/usr/bin/perl -w
+use strict;
+my $pp=get_extended_parser();
+
+while(my $line = <>)
+{
+    chomp $line;
+    my $pl=$pp->($line);
+    $pl->{A};
+    $pl->{pos};
+    $pl->{refc};
+    $pl->{eucov};
+    $pl->{totcov};
+    pp();
+    $pp->();
+    
+    
+    
+}
+
+my %hash;
+
+$hash{A}=1;
+
+my $refh=\%hash;
+
+my $a = $refh->{A};
+
