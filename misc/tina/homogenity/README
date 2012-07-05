@@ -1,0 +1,58 @@
+
+This folder contains an R script that calculates Woolf and Breslow-Day homogeneity tests p-values for population data stored in synchronized pileup file. 
+
+Requirements	
+------------
+These programs should be installed:
+-R, R packages: "Formula", "metafor"
+ 
+The packages can be found on these locations: 
+Formula package: http://cran.r-project.org/web/packages/Formula/index.html
+metafor package: http://cran.r-project.org/web/packages/metafor/index.html
+
+You can install the packages by using the following two commands in a terminal window:
+
+R CMD INSTALL "path_to_Formula_package.tar.gz"
+R CMD INSTALL "path_to_metafor_package.tar.gz" 
+
+Install the packages in the order as above, Formula package first, metafor second.
+
+Input data
+----------
+Input file is a tab delimited file that contains a lightweight representation of all pileup files of interest. We call this file format synchronized pileup file format. You can obtain synchronized pileup from pileups of your interest using script popoolation2/synchronize-pileup.pl. For details about the synchronize pileup format see man page of script popoolation2/synchronize-pileup.pl.
+
+We assume that the synchronize pileup contains the same number of populations that underwent two different treatments. 
+
+As an input file you also can use a file that is output of CMH test whereas the file contains synchronized pileup columns as well.
+
+Output data
+-----------
+Output file is a tab delimited text file that contains all the information as the input plus two extra columns at the end of the file. These two columns contain Woolf and Breslow-Day homogenity test p-value, respectively.  
+
+Parameters
+----------
+
+Script homogenity.r expects three mandatory input parameters: --input, --output, and --populations. 
+
+The first two parameters are names of input and output file. 
+
+--populations 
+
+the parameter specifies pairs of populations for which the odds ratio will be calculated. 
+Each pair of populations has to be separated by a "," and the two populations for which 
+the odds ratio will be calculated by a "-". For example when user provides 4-6,5-7 the script 
+will calculate odds ratio for populations in fourth and sixth column and odds ratio 
+for populations in fifth and seventh column. The columns are numbered from 1. This usually means, 
+that the first column with populational data is a column numbered by 4.   
+
+Example of a usage:
+
+R --vanilla --slave --input "input_sync_pileup" --populations "populations" --output "output_file_name" < homogenity.r > "log" 2> "err"
+
+R --vanilla --slave --input test_data/test_data_big --populations 4-7,5-8,6-9 --output test_data/test_data_big.out < homogenity.r > test_data/log 2> test_data/err
+
+Try to use the script on files in test_data folder.
+
+
+
+

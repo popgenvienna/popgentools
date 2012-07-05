@@ -1,0 +1,33 @@
+--- #YAML:1.0
+name:               Math-Polynomial
+version:            1.004
+abstract:           Perl class for polynomials in one variable
+author:
+    - Martin Becker <becker-cpan-mp@cozap.com>
+license:            perl
+distribution_type:  module
+configure_requires:
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
+    File::Basename:       0
+    File::Spec:           0
+    FindBin:              0
+    Math::Complex:        0
+    Test:                 0
+requires:
+    Carp:      0
+    overload:  0
+    perl:      5.006
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.56
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4
+recommends:
+    Math::BigRat:   0
+    Math::Complex:  0
+    Math::ModInt:   0

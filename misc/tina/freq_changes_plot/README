@@ -1,0 +1,68 @@
+
+The folder contains a script that produce a plot of frequency differences among 3 differently treated types of population (for example, light, dark and early-late populations). One of the three populational types is taken as a reference (represented by line at y coordinate 0 on a plot) and the two other populational frequencies differences are plotted on the figure. 
+
+
+Input
+-----
+Sync data for populations + frequencies of the populations
+
+
+Parameters
+----------
+--input - an input file name, the file should be tab delimited and contains the following data for each position: 
+
+chromosome, 
+position, 
+frequency(ies) of major allele for reference population(s)
+frequency(ies) of major allele for a population(s) that underwent treatment1
+frequency(ies) of major allele for a population(s) that underwent treatment2 
+CMH test p-values for each pair of population types (reference, treatment1, treatment2)
+ 
+--pop-freq-reference - a comma separated list of columns that contain major allele frequency(ies) for reference population(s). The frequencies are averaged in the case when more than one frequency column is specified. Columns are numbered from 1. This usually means, that first populational column has number 4.
+
+--pop-freq-treatment1 - a comma separated list of columns that contain major allele frequency(ies) for a population(s) that underwent treatment1. The frequencies are averaged in the case when more than one frequency column is specified. Columns are numbered from 1. This usually means, that first populational column has number 4.
+
+--pop-freq-treatment2 - a comma separated list of columns that contain major allele frequency(ies) for a population(s) that underwent treatment2. The frequencies are averaged in the case when more than one frequency column is specified. Columns are numbered from 1. This usually means, that first populational column has number 4.
+
+--CMH-columns - a comma separated list of columns that contain CMH tests p-values in the following order:
+
+1. CMH test between reference and treatment1 populations
+2. CMH test between reference and treatment2 populations
+3. CMH test between treatment1 and treatment2 populations
+
+--cutoff - p-value cutoff, only the frequencies with CMH test p-value below the cutoff are considered as significant. Default value of the parameter is 0.05.
+
+--col-base, --col-treatment1, --col-treatment2 - color settings, use character strings recognized by R as colors (for example black, green, blue). Some default values alredy set.
+
+--chromosomes - a comma separated list of chromosomes that occur in your data (default X,2L,2R,3L,3R,4). On the output figure, chromosomes will be displayed in the same order as in which they are specified by this option. 
+
+--print-non-significant - a flag. If used, pairs of two nonsignificant frequencies (treatment1, treatment2) are plotted, otherwise are not.
+
+--width - a width of the plot (defalut 72*30), should be diviseble by 72
+
+--height - a height of the plot (default 72*20), should be diviseble by 72
+
+--xlab - a label of x axis on the plot (no quotes, just a text) 
+
+--ylab - a label of y axis on the plot (no quotes, just a text)
+
+--ylim - a comma separated pair of minimal and maximal value of y axis on the plot (default -0.35,0.6)
+
+--highlight - a number of regions that should be highlighted 
+
+--region - a comma separated list of data about a region that should be highlighted. The data should be in the following order: 
+
+1: name of the region (will be printed on the plot)
+2: start position of the region 
+3: end position of the region
+4: chromosome
+
+example: --region tan,9106807,9122238,X
+
+--cex-text - a numerical value that spacifies the amount by which plotting text should be magnified. It applies for region names and legend text. Default value is 1.7.
+
+Example of usage:
+
+R --vanilla --slave --input test_data/together_CHR_BP_refBase_lightPops_darkPops_earlyLatePop_lightPval_darkPval_refPval_populations_frequencies --pop-freq-reference 16 --pop-freq-treatment1 12,13 --pop-freq-treatment2 14,15 --CMH-columns 9,10,11 --print-non-significant --xlab chromosome --ylab distance of light/dark freq from reference --ylim -0.5,0.7 --highlight 4 --region tan,9106807,9122238,X --region bab,991207,1191114,3L --region ebony,17050772,17067798,3R --region cip4,4322616,4364120,3L --cex-text 2 < freq_changes_plot/plot_freq_changes.R  > test_data/log 2>test_data/err  
+
+

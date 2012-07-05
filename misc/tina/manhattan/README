@@ -1,0 +1,68 @@
+
+
+This folder contains an R script that plots manhattan plot (http://en.wikipedia.org/wiki/Manhattan_plot) of input data. 
+
+The script is suited for two different cases: 1) whole genome manhattan plot and 2) manhattan plot for a small region of one chromosome.
+
+
+Requirements	
+------------
+-R
+
+
+Input data
+----------
+
+Input file is a tab delimited file that consists of three columns: chromosome, position, and p-value of interest, respectively.
+
+
+Output
+------
+
+Figure in png format which name is the same as the name of input file plus ".png" at the end.
+
+
+Running the script
+------------------ 
+
+Script manhattan.r has these parameters:
+
+--vanilla, --slave - parameters of R for command-line running 
+
+--input - a name of an input file with three tab delimited columns (chromosome, position, and p-value, respectively), (mandatory parameter)
+
+--global - says that a whole genome data are in use (the parameter is mutually exclusive with a parameter --local) 
+
+--local - positions in "--input" file come from one chromosome (the parameter is mutualy exclusive with --global) 
+
+--cutoff-positions: a comma separated list (without spaces) of positions that should be used as a cutoffs. Every cutoff position refer to a data point on the position when data are sorted according to their p-values in ascendent order (from the smallest ones to the biggest). All the datapoints plotted inbetween two cutoffs or above the highest cutoff are distinguished by color from the other data points. The positions in the list should be in ascendent order (from the smallest ones to the biggest). This parameter is optional, it is mandatory only if you want to use --cutoff-labels.
+
+--cutoff-labels - a comma separated list (without spaces) of labels that will be printed into the plot. A number of labels should be the same as the number of cutoff-positions or zero. Each label should be space-free, an underscore in each label will be exchanged for a space.  
+
+--pval-space - a number that specify size of space between manhattan plot and labels of cutoff lines (default 150)
+
+--main - specifies a main label of plot
+
+--xlab - specifies a label for x axis of plot
+
+
+Parameters for comparison of two data analyses:
+
+--cmp - compare data from two analyses, only apply for "--local" option 
+
+--input1, --input2 - name of input files in the same format as "--input". Data points from the files are plotted sequentialy. First, the data from "--input1" file are plotted and second, the data from "--input2" file are plotted above the first one. Therefore, it matters which file is used as the first one and which one as the second. Please, try both options and choose the better one.
+
+--at, --lab - a comma separated lists. "--at" list specifies the positions at x axis at which the "--lab" list will be printed (only for "--local") as labels of x axis.
+
+Example for "--at" and "--lab":
+
+with parameter settings --at 1029080,1075861,1120690 --lab start,midle,end you get label "start" displayed on the position 1029080 of x axis, label "midle" on the position 1075861, and label end on the position 1120690 of x axis.
+
+ 
+Examples of usage: 
+
+R --vanilla --slave --gwas --cutoff-positions 2596 --cutoff-labels FDR_=_0.01 --input inFile < manhattan_plot.r  > log 2> err
+
+R --vanilla --slave --local --cutoff-positions 1,2 --cutoff-labels FDR_=_0.01,FDR_=_0.1 --input test_data/test_data_local < manhattan_plot.r > test_data/log_local 2> test_data/err_local
+
+R --vanilla --slave --local --cutoff-positions 896,4566 --cutoff-labels FDR_=_0.01,FDR_=_0.1 --input test_data/test_data_global < manhattan_plot.r > test_data/log_global 2> test_data/err_global
