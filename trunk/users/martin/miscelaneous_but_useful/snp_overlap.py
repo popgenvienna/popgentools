@@ -18,6 +18,7 @@ This script uses the first two columns (Chromosome and position) to match both i
 
 parser.add_option("--input1", dest="i", help="any file with Chromosme and positions in the first two columns")
 parser.add_option("--input2", dest="j", help="any file with Chromosme and positions in the first two columns")
+(options, args) = parser.parse_args()
 
 
 genehash={}
