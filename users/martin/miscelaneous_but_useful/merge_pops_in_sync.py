@@ -18,6 +18,7 @@ The purpose of this script is combine different populations in a sync file (--in
 
 parser.add_option("--input", dest="input", help="a sync file")
 parser.add_option("--pops", dest="p", help="define populations, which should be merged (+) or just printed (,); see Help for details")
+(options, args) = parser.parse_args()
 
 
 populations=[map(int,x.split("+")) for x in options.p.split(",")]
