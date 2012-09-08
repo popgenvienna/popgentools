@@ -52,6 +52,7 @@ for l in open(options.s,"r"):
 	else:
 		break
 ###### identify number of populations ########
+
 file=open(options.m,"r")
 datalength=(len(file.readline().split())-3)/3
 datarange=range(datalength)
@@ -69,7 +70,7 @@ for l in open(options.m,"r"):
 			tl[i]+=int(a[3+(i*3)])
 
 ##### print average coverage
-print "chrom\t"+"\t".join(map(str,datarange))
+print "chrom\t"+"\t".join(options.n.split(","))
 
 for k,v in sorted(leng2.items()):
 	ls=[]
