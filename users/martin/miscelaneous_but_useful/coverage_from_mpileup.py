@@ -7,7 +7,7 @@ from optparse import OptionParser,OptionGroup
 
 #########################################################   HELP   #########################################################################
 #print
-usage= "python %prog -m sample.mpileup -s inh.sam  > output.cov"
+usage= "python %prog -m sample.mpileup -s inh.sam  -n pop1,pop2,pop3 > output.cov"
 parser = OptionParser(usage=usage)
 group=OptionGroup(parser,"""
 H E L P:
@@ -19,6 +19,7 @@ This script calculates the average coverage of all populations in a pileup or mp
 #########################################################   CODE   #########################################################################
 
 parser.add_option("-m", "--mpileup", dest="m", help="mpileup file")
+parser.add_option("-n", "--names", dest="m", help="list of names of the populations in the mpileup, need to be separated by a comma; this information will be used for the header")
 parser.add_option("-s", "--samheader", dest="s", help="Header of SAM file; remember! samtools view -H")
 (options, args) = parser.parse_args()
 
