@@ -104,26 +104,44 @@ def CI_ind():
 	for pop,alleles in sorted(popalleles.items()):
 		#print pop
 		### test if coverage of individual is above threshold, else append "N"
-		if sum(alleles.values())<int(options.c) or sum(alleles.values())> covdict[pop][chrom]:
+		if sum(alleles.values())<int(options.c): 
 			#print pop,"c"
 			hapallele.append("N")
 			qual.append("c")
 			freqal.append("NA")
+		elif sum(alleles.values())> covdict[pop][chrom]:
+			#print pop,"c"
+			hapallele.append("N")
+			qual.append("C")
+			freqal.append("NA")
 		else:
 			## test if alleles found in individual is fullfilling the minimum count criteria else delete the allele
-			for k in alleles.keys():
-				if k not in fullalleles:
+			for k,val in alleles.items():
+				if val<=2:
 					del alleles[k]
 			if len(alleles)==2:
+				if refal not in alleles.keys():
+					#print pop,"a"
+					hapallele.append("N")
+					qual.append("a")
+					freqal.append("NA")
+					continue
 				total=sum(alleles.values())
 				## test if CI fits the data:
 				if CI([total/2,total/2],0.9)[0]<=min(alleles.values())/float(sum(alleles.values())):
 					for k in alleles.keys():
 						if k!=refal[0]: 
-							#print pop,"2"
-							hapallele.append(k)
-							qual.append("2")
-							freqal.append(alleles[k]/float(sum(alleles.values())))
+							## test if alternative allele occurs more than options.m in cummulative sample
+							if fullalleles[k]>=int(options.m):
+								#print pop,"2"
+								hapallele.append(k)
+								qual.append("2")
+								freqal.append(alleles[k]/float(sum(alleles.values())))
+							else:
+								#print pop,"a"
+								hapallele.append("N")
+								qual.append("m")
+								freqal.append("NA")
 				else:
 					#print pop,"2"
 					hapallele.append("N")
@@ -140,48 +158,7 @@ def CI_ind():
 				qual.append("a")
 				freqal.append("NA")
 
-def CI_all():
-	### extract the counts of all alleles from populations carrying the minor allele
-	testci=collections.defaultdict(lambda:0)
-	for pop,alleles in sorted(popalleles.items()):
-		if minor in alleles:
-			for allele,counts in alleles.items():
-				testci[allele]+=counts
-	
-	if len(testci)==0:
-		run()
-		
-	else:
-		fiftyfifty=sum(testci.values())/2
-		## test whether the minor allele freq cummulated over all indivduals carrying it is higher than the lower boundary of the 95% binomial CI based on all reads of these individuals and an expected freq of 50%	
-		if CI([fiftyfifty,fiftyfifty],0.95)[0]<=min(testci.values())/float(sum(testci.values())):
-		
-			for pop,alleles in sorted(popalleles.items()):
-				### test if coverage of individual is above threshold, else append "N"
-				if sum(alleles.values())<=int(options.c) or sum(alleles.values())>= covdict[pop][chrom]:
-					hapallele.append("N")
-					qual.append("c")
-					freqal.append("NA")
-				else:
-					for k in alleles.keys():
-						if k not in fullalleles:
-							del alleles[k]
-					if len(alleles)==2:
-						for k in alleles.keys():
-							if k!=refal[0]:
-								hapallele.append(k)
-								freqal.append(alleles[k]/float(sum(alleles.values())))
-								qual.append("2")
-					elif len(alleles)==1:
-							hapallele.append(alleles.keys()[0])
-							qual.append("1")
-							freqal.append("NA")
-					else:
-						hapallele.append("N")
-						qual.append("a")
-						freqal.append("NA")
-		else:
-			run()
+
 
 ############################### max coverage #################################################
 
@@ -191,7 +168,7 @@ synccode=["A","T","C","G"]
 chromo=["2L","2R","3L","3R","4","X"]
 popstotest=range(3,len(open(options.input).readline().split()[3:])+3)
 
-if "," not in options.a:
+if "/" not in options.a:
 	out_cov=open(options.o+".cov","w")
 	cutoff=float(options.a)
 	covdict_full=collections.defaultdict(lambda:collections.defaultdict(lambda:[]))
@@ -235,16 +212,25 @@ if "," not in options.a:
 		string.append(string_chrom)
 		chromlist.append(chrom_ID)
 	## write the ID's and coverages to an output file. the last line can be used as the input for another run if you do not want to calucalte everything again	
-	out_cov.write(" coverage cutoff of top ",cutoff*100,"%\n")
+	out_cov.write(" coverage cutoff of top "+str(cutoff*100)+"%:\n")
+	print " coverage cutoff of top "+str(cutoff*100)+"%:"
 	out_cov.write("+".join([",".join(x) for x in chromlist ])+"\n")
+	print "+".join([",".join(x) for x in chromlist ])
 	out_cov.write("+".join([",".join(map(str,x)) for x in string ])+"\n")
+	print "+".join([",".join(map(str,x)) for x in string ])
 	
 	covdict_full=0
 
 else:
+	chromo=["2L","2R","3L","3R","4","X"]
 	covdict=collections.defaultdict(lambda:collections.defaultdict(lambda:0))
-	for i in range(len(options.a.split("+"))):
-		covdict[popstotest[i]]=dict(zip(chromo,map(int,options.a.split("+")[i].split(","))))
+	cov=open(options.a,"r")
+	cov.readline()
+	cov.readline()
+	coverage=cov.readline().rstrip()
+	for i in range(len(coverage.split("+"))):
+		covdict[i+3]=dict(zip(chromo,map(int,coverage.split("+")[i].split(","))))
+#mincov
 #print covdict
 ############################### determine haplotype #########################################
 
@@ -275,11 +261,6 @@ for line in open(options.input,"r"):
 				## store counts for each population separately
 				popalleles[pop][synccode[i]]+=int(a[pop].split(":")[i])
 	
-	## if an allele is below the minimum threshold defined in the commandline, remove this allele from the cummulative dictionary
-	for k,v in fullalleles.items():
-		if v < int(options.m):
-			del fullalleles[k]
-
 		
 	## if overall coverage is too low just print N's for all pops and continue
 	if len(fullalleles)==0:
@@ -289,11 +270,10 @@ for line in open(options.input,"r"):
 	############################# extract reference allele ###################################
 	
 	reference=popalleles[3]
-	
-	## delete alleles not fullfilling the overall criteria
-	for allele in reference.keys():
-		if allele not in fullalleles:
-			del reference[allele]
+
+	for k,val in reference.items():
+		if val<=2:
+			del reference[k]
 			
 	## test if reference is above minimum and below maximum coverage 		
 	if sum(reference.values())<int(options.c) or sum(reference.values())>covdict[3][chrom]:
@@ -323,22 +303,15 @@ for line in open(options.input,"r"):
 	else:
 		refal=reference.keys()[0]
 		del popalleles[3]
+
 	
-	### keep two major alleles if more than three alleles in whole samples
-	if len(fullalleles)>=2:
-		tar= [(key,value) for key,value in fullalleles.items()]
-		tar.sort(key=lambda x:-x[1])
-		fullalleles=collections.defaultdict(lambda:0)
-		for k,v in tar[:3]:
-			fullalleles[k]=v
 		
 	################# determine the sire allele in the indivduals ###########################
 	
 	freqal=[]  ## list of allelesfreqs from the haplotypes
 	hapallele=[] ## list of alleles from the haplotypes
 	qual=[] ## list of description symbols for each individual
-	if len(fullalleles)==2:
-		minor=tar[1][0]
+	if len(fullalleles)>1:
 		if options.ci=="individual":
 			CI_ind()
 		else: 
@@ -350,3 +323,47 @@ for line in open(options.input,"r"):
 	if len(freqal)!=0 and list(set(freqal))!=["NA"]:
 		out2.write("\t".join(a[:2])+"\t"+"\t".join(map(str,freqal))+"\n")
 	
+
+#deprecated option:
+#def CI_all():
+#	### extract the counts of all alleles from populations carrying the minor allele
+#	testci=collections.defaultdict(lambda:0)
+#	for pop,alleles in sorted(popalleles.items()):
+#		if minor in alleles:
+#			for allele,counts in alleles.items():
+#				testci[allele]+=counts
+#	
+#	if len(testci)==0:
+#		run()
+#		
+#	else:
+#		fiftyfifty=sum(testci.values())/2
+#		## test whether the minor allele freq cummulated over all indivduals carrying it is higher than the lower boundary of the 95% binomial CI based on all reads of these individuals and an expected freq of 50%	
+#		if CI([fiftyfifty,fiftyfifty],0.95)[0]<=min(testci.values())/float(sum(testci.values())):
+#		
+#			for pop,alleles in sorted(popalleles.items()):
+#				### test if coverage of individual is above threshold, else append "N"
+#				if sum(alleles.values())<=int(options.c) or sum(alleles.values())>= covdict[pop][chrom]:
+#					hapallele.append("N")
+#					qual.append("c")
+#					freqal.append("NA")
+#				else:
+#					for k in alleles.keys():
+#						if k not in fullalleles:
+#							del alleles[k]
+#					if len(alleles)==2:
+#						for k in alleles.keys():
+#							if k!=refal[0]:
+#								hapallele.append(k)
+#								freqal.append(alleles[k]/float(sum(alleles.values())))
+#								qual.append("2")
+#					elif len(alleles)==1:
+#							hapallele.append(alleles.keys()[0])
+#							qual.append("1")
+#							freqal.append("NA")
+#					else:
+#						hapallele.append("N")
+#						qual.append("a")
+#						freqal.append("NA")
+#		else:
+#			run()

@@ -19,6 +19,7 @@ This script calculates the average coverage of all populations in a pileup or mp
 #########################################################   CODE   #########################################################################
 
 parser.add_option("-m", "--mpileup", dest="m", help="mpileup file")
+parser.add_option("-o", "--output", dest="o", help="output file")
 parser.add_option("-n", "--names", dest="n", help="list of names of the populations in the mpileup, need to be separated by a comma; this information will be used for the header")
 parser.add_option("-s", "--samheader", dest="s", help="Header of SAM file; remember! samtools view -H")
 (options, args) = parser.parse_args()
@@ -59,28 +60,34 @@ datarange=range(datalength)
 
 ###### sum up coverage per population per chromosme 
 tl=collections.defaultdict(lambda:0)
+codec=""
 leng2=collections.defaultdict(lambda:collections.defaultdict(lambda:0)) 
 for l in open(options.m,"r"):
 	a=l.split()
 	if a[0] not in leng.keys():
 		continue
+	if codec=="" or codec!=a[0]:
+		if a[0] in leng:
+			print a[0],"processing"
+			codec=a[0]
 	for i in range(len(datarange)):
 		leng2[a[0]][i]+=int(a[3+(i*3)])
 		if a[0] in code:
 			tl[i]+=int(a[3+(i*3)])
 
 ##### print average coverage
-print "chrom\t"+"\t".join(options.n.split(","))
+out=open(options.o,"w")
+out.write("chrom\t"+"\t".join(options.n.split(","))+"\n")
 
 for k,v in sorted(leng2.items()):
 	ls=[]
 	for pop,su in sorted(v.items()):
 		ls.append(str(su/float(leng[k])))
-	print k+"\t"+"\t".join(ls)
-print "______________________________"
+	out.write(k+"\t"+"\t".join(ls)+"\n")
+out.write("______________________________"+"\n")
 
 ls=[]
 for pop,su in sorted(tl.items()):
 	ls.append(str(su/float(totallength)))
 
-print "totaleuchr\t"+"\t".join(ls)
+out.write("totaleuchr\t"+"\t".join(ls)+"\n")

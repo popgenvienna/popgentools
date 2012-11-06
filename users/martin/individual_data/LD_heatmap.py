@@ -106,11 +106,13 @@ def execute(snplist,chr):
 				continue
 			afhash=doubleallelecodes(i,j,individual)
 			if afhash=="NA":
+				print "afhash",i,j
 				continue
 			## calculate r2 from Allele frequencies
 			fi,fj,ftotal,allele1,allele2=afhash
 			rsq=rsquared(fi,fj,ftotal)
 			if rsq=="NA":
+				print "rsquared",fi,fj
 				continue
 			rhash.append(rsq)
 			##store positions of SNP1
@@ -217,10 +219,13 @@ for l in open(options.input,"r"):
 	if a[0]!=chromosome:
 		continue
 	## only use positions with more than 1 allele
-	if len(a[-1].split("/"))!=2 or "/" in a[3]:
-		continue
+	if "-" not in a[-1]:
+		if len(a[-1].split("/"))!=2 or "/" in a[3]:
+			continue
 	## test if no N and polymorphuc
 	al=""
+	if a[4]=="-":
+		continue
 	for i in individual:
 		al+=a[4][i]
 	if "N" in al:
