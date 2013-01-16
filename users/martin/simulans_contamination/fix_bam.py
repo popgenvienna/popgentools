@@ -21,7 +21,7 @@ Note that the pysam package needs to be installed (type: sudo easy_install pysam
 
 parser.add_option("--input", dest="input", help="A BAM file")
 parser.add_option("--mel", dest="mel", help="the melanogaster specific fwd FASTQ")
-parser.add_option("--sim", dest="pops", help="the melanogaster specific fwd FASTQ")
+parser.add_option("--sim", dest="sim", help="the melanogaster specific fwd FASTQ")
 
 parser.add_option_group(group)
 (options, args) = parser.parse_args()
