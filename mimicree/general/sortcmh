@@ -1,0 +1,3 @@
+#!/bin/sh
+FIELDS=`cat $1 | awk '{print NF}' | head -1`
+cat $1| sort -k${FIELDS},${FIELDS}nr
