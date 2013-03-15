@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import math
+import sys
 
-t=(2,1,3)
-q=(0,10,20)
-print t+q
+print sys.argv[0]
+print sys.argv[1]
+print sys.argv[2]
