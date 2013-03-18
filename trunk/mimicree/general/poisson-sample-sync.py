@@ -197,10 +197,7 @@ class PopLine:
 	
 	def __str__(self):
 		popstr="\t".join(map(str,self.populations))
-		pvalue=self.pvalue
 		tojoin=[self.chr,self.pos,self.refc,popstr]
-		if pvalue is not None:
-			tojoin.append(pvalue)
 		return "\t".join([str(x) for x in tojoin])
 
 
@@ -256,6 +253,6 @@ for s in SyncReader(options.input):
 		pr=poisson.rvs(coverage)
 		np=p.subsample(pr)
 		nuevopops.append(np)
-	npl=PopLine(s.chr,sc.pos,s.refc,nuevopops)
+	npl=PopLine(s.chr,s.pos,s.refc,nuevopops)
 	print str(npl)
 
