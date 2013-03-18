@@ -32,7 +32,8 @@ for line in ifh:
     a=line.split("\t")
     a.pop(3) # remove A/C
     a.pop(3) # remove . comment
-    a.pop(3) # remove bug-column..
+    if(a[3]==""):
+        a.pop(3) # remove bug-column..
     for i in range(3,len(a)):
         e=a[i]
         entry=convert_entry(e,cov)
