@@ -27,7 +27,7 @@ ofh=open(options.output,"w")
 # Determine sample size etc
 subsamplesize=int(options.samplesize)
 fullsamplesize=HaplotypeIO.haplotypeCount(options.haplotypes)
-if(subsamplesize>=fullsamplesize):
+if(subsamplesize>fullsamplesize):
 	raise Exception("subsamplesize nees to be smaller than the number of populations")
 	
 randindex=createRandomIndices(fullsamplesize,subsamplesize)
