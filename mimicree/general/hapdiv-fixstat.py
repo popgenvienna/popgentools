@@ -92,23 +92,23 @@ selected=sys.argv[1]
 
 selhash=get_selected_hash(selected)
 
-for i in range(2,len(sys.argv)):
-        filename=sys.argv[i]
-        selected=0
-        fixed=0
-        for line in open(filename):
-                line=line.rstrip()
-                a=line.split("\t")
-                chr,pos=(a[0],a[1])
-                key=chr+":"+pos
-                if key in selhash:
-                        selected+=1
-                        parsed=SyncReader.parse_sync([a[3]])[0]
-                        if(parsed[0]==0 or parsed[1]==0):
-                                fixed+=1
-        topr=[]
-        topr.append(filename)
-        topr.append(str(selected))
-        topr.append(str(fixed))
-        toprstr="\t".join(topr)
-        print(toprstr)
+
+filename=sys.argv[2]
+selected=0
+fixed=0
+for line in open(filename):
+        line=line.rstrip()
+        a=line.split("\t")
+        chr,pos=(a[0],a[1])
+        key=chr+":"+pos
+        if key in selhash:
+                selected+=1
+                parsed=SyncReader.parse_sync([a[3]])[0]
+                if(parsed[0]==0 or parsed[1]==0):
+                        fixed+=1
+topr=[]
+topr.append(filename)
+topr.append(str(selected))
+topr.append(str(fixed))
+toprstr="\t".join(topr)
+print(toprstr)
