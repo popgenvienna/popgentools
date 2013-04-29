@@ -21,6 +21,8 @@ def parse_line(line):
 	2L      686891    G      G/A    AG GG GG GG GG
 	2L      936681    A      A/G    GG AA AA AA AA
 	2L      861026    T      A/T    TT AT AA AA TT
+	SCHEISSE:
+	2L 	230000	  T	 A/T	TT TT TT TT TT
 	"""
 	a=line.split("\t")
 	chr=a[0]
@@ -65,14 +67,16 @@ for line in open(options.input):
 		# process only loci that will end up in the  initial set
 	line=line.rstrip()
 	(chr,pos,ancestral,derived,derivedfreq)=parse_line(line)
+	
+	
 	if(random.random()<0.5):
 		# the derived is selected
-		if(derivedfreq<maxfreq):
+		if(derivedfreq<maxfreq and derivedfreq > 0.0):
 			cand.append(SelectedCandidate(chr,pos,ancestral)) # w11=ancestral # w22=selected = derived
 	else:
 		# the ancestral is selected
 		ancfreq=1.0-derivedfreq
-		if(ancfreq < maxfreq):
+		if(ancfreq < maxfreq and ancfreq > 0.0):
 			cand.append(SelectedCandidate(chr,pos,derived)) # w11=derived # w22=ancestral
 
 
