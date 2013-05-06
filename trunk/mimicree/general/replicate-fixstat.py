@@ -79,12 +79,12 @@ parser = OptionParser()
 stat=[0,]*20
 filename=sys.argv[1]
 
-for p in SyncReader(filename):
+for chr,pos,pops in SyncReader(filename):
 	for i in range(0,20):
 		index=2*i +1
-		active=p[index]
+		active=pops[index]
 		if(active[0]==0 or active[1]==0):
-			stat[index]+=1
+			stat[i]+=1
 
 for l in stat:
 	print(l)
