@@ -1,3 +1,2 @@
 #!/bin/sh
-FIELDS=`cat $1 | awk '{print NF}' | head -1`
-cat $1| sort -k${FIELDS},${FIELDS}gr
+cat $1 | awk 'BEGIN{OFS="\t"}{print $1,$2,$NF}'|sort -k3,3gr
