@@ -3,6 +3,7 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
+import gzip
 
 
 
@@ -37,7 +38,7 @@ selectedsignal=0.0
 selectedcount=0.0
 normalsignal=0.0
 normalcount=0.0
-for line in open(filename):
+for line in gzip.open(filename):
 	line=line.rstrip()
 	a=line.split("\t")
 	chr,pos=(a[0],a[1])
