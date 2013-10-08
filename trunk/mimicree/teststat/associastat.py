@@ -33,7 +33,7 @@ class SyncReader:
 		
 		a=line.split()
 		chr=a.pop(0)
-		pos=a.pop(0)
+		pos=int(a.pop(0))
 		refc=a.pop(0)
 		majmin=SyncReader.parse_sync(a)
 		return (chr,pos,majmin)
