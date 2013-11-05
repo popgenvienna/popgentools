@@ -60,7 +60,7 @@
         {
             chomp $l;
             my @ar=split /\t/,$l;
-            die "Length of the header does not fit with length of the entry" unless $colcount == scalar(@ar);
+            die "Length of the header does not fit with length of the entry: header length $colcount - column @ar" unless $colcount == scalar(@ar);
             my $eh={};
             
             for my $i(0..($colcount-1))
