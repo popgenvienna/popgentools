@@ -16,8 +16,10 @@ def extract_FlyBaseID(toextract):
         tmp=re.split(r"\s+",toextract)
         fbid=tmp[2].rstrip(";")
         teid=tmp[3].rstrip(".")
+        # famid  Dsil\Loa
+        famid=re.sub(r"D[^\\]+\\","",teid)
         #teid=re.sub(r"\\",";",teid)
-        return (fbid,teid)
+        return (fbid,teid,famid)
         
 def extract_ID(toextract):
         # ID   DM23420    standard; DNA; INV; 6126 BP.
@@ -35,7 +37,7 @@ def read_hierarchy(rawhier):
                 "Retroviral":("LTR","LTR","RNA"),
                 "non-LTR":("non-LTR","non-LTR","RNA"),
                 "SINE-like":("SINE","non-LTR","RNA"),
-                "IR-elements":("IR","TIR","DNA"),
+                "IR-elements:":("IR","TIR","DNA"),
                 "MITE":("MITE","TIR","DNA"),
                 "Foldback":("Foldback","Foldback","DNA"),
                 "Helitron":("Helitron","Helitron","Helitron"),
@@ -56,18 +58,24 @@ def print_hier(outfile,lowHier,highHier):
         # lowhier: ID=>(fbid,teid) #teid=subfamily 
         # highier: teid=>(suborder,order,class)
         ofh=open(outfile,"w")
-        ofh.write("insert\tfb\tsubfamily\tsuborder\torder\tclass\n")
+        ofh.write("insert\tfb\tsubfamily\tfamily\tsuborder\torder\tclass\n")
+        testvalue=7
         for k,v in lowHier.items():
                 topr=[]
                 topr.append(k) # insert
                 topr.append(v[0]) # fb
                 topr.append(v[1])
+                topr.append(v[2])
                 key=v[1]
                 if(key in highHier):
                         tmp=highHier[key]
                         topr.append(tmp[0])
                         topr.append(tmp[1])
                         topr.append(tmp[2])
+                else:
+                        raise ValueError("No key found for "+key)
+                if len(topr) != testvalue:
+                        raise ValueError("length of output is not acceptable, should be "+str(testvalue) + "Output " + "\t".join(topr))
                 toprstr="\t".join(topr)
                 ofh.write(toprstr+"\n")
         ofh.close()
@@ -87,14 +95,14 @@ def print_fasta(outputfile,rawfasta):
                         if(line.startswith("ID")):
                                 id=extract_ID(line)
                         elif(line.startswith("DR")):
-                                fbid,teid=extract_FlyBaseID(line)
+                                fbid,teid,famid=extract_FlyBaseID(line)
                         elif(line.startswith("     ")):
                                 sequence+=strip_sequence(line)+"\n"
                 ofh.write(">"+id+"\n")
                 ofh.write(sequence)
                 if id in teh:
                         raise ValueErro(id +"is present multiple times")
-                teh[id]=(fbid,teid)
+                teh[id]=(fbid,teid,famid)
         return teh
                                 
 
