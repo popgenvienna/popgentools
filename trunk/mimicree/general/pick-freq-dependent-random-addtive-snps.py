@@ -49,7 +49,7 @@ parser.add_option("--input",dest="input",help="A file containing the dgrp haplot
 parser.add_option("-n","--number-selected",dest="numsel",help="Number of selected SNPs")
 parser.add_option("-e","--heterozygous",dest="het",help="Heterozygous effect")
 parser.add_option("-s","--selection",dest="selcoef",help="Selection coefficient")
-parser.add_option("--min-freq",dest="minfrequency", help="The minimum frequency")
+parser.add_option("--min-frequency",dest="minfrequency", help="The minimum frequency")
 parser.add_option("-m","--max-frequency",dest="maxfrequency",help="Max. frequency of selected allele")
 parser.add_option("--loci-count",dest="locicount",help="Approximate loci count; Necessary for random picking approximation")
 (options, args) = parser.parse_args()
@@ -74,7 +74,7 @@ for line in open(options.input):
 	
 	if(random.random()<0.5):
 		# the derived is selected
-		if(derivedfreq<maxfreq and derivedfreq >= minfreq):
+		if(derivedfreq < maxfreq and derivedfreq >= minfreq):
 			cand.append(SelectedCandidate(chr,pos,ancestral,derivedfreq)) # w11=ancestral # w22=selected = derived
 	else:
 		# the ancestral is selected
