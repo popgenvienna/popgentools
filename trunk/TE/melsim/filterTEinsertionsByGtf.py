@@ -1,5 +1,6 @@
 import sys
 import collections
+from optparse import OptionParser, OptionGroup
 
 def loadgtfarray(file):
 	"""
@@ -13,8 +14,8 @@ def loadgtfarray(file):
 		l=l.rstrip("\n")
 		a=l.split("\t")
 		chr=a[0]
-		start=a[3]
-		end=a[4]
+		start=int(a[3])
+		end=int(a[4])
 		if start > end:
 			start,end=(end,start)
 		gtfa[chr].append((start,end))
@@ -27,7 +28,7 @@ def is_present(chr,pos,gtfa):
 	chrspec=gtfa[chr]
 	for a in chrspec:
 		if pos >= a[0] and pos <=a[1]:
-			return true
+			return True
 	return False
 	pass
 
@@ -49,7 +50,7 @@ for l in open(options.te):
 	l=l.rstrip("\n")
 	a=l.split("\t")
 	chr=a[0]
-	pos=int(a[1])
+	pos=int(float(a[1]))
 	ispresent=is_present(chr,pos,gtfa)
 	if(ispresent):
 		print l
