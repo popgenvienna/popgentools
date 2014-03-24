@@ -38,7 +38,10 @@ def computeHeterozygosit(maj,min):
 """
 
 def computeHeterozygosity(c):
-	fcov=float(c[0]+c[1])
+	cov=c[0]+[c1]
+	if cov==0:
+		return 0.0
+	fcov=float(cov)
 	fmaj=float(c[0])/fcov
 	fmin=float(c[1])/fcov
 	h=1-fmaj**2.0-fmin**2.0
@@ -47,6 +50,8 @@ def computeHeterozygosity(c):
 def computeDivergence(c1,c2):
 	cov1=c1[0]+c1[1]
 	cov2=c2[0]+c2[1]
+	if cov1==0 or cov2==0:
+		return 0.0
 	sumcomp=float(cov1*cov2)
 	summaj=float(c1[0]*c2[0])
 	summin=float(c1[1]*c2[1])
@@ -57,6 +62,8 @@ def computeDivergence(c1,c2):
 def get_hsc(basec,derc):
 	hs=computeHeterozygosity(derc)
 	c=computeDivergence(basec,derc)
+	if c<0.00000000000001:
+		return 0.0
 	return hs/c
 
 def parse_comparestring(comp):
