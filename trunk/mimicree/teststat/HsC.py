@@ -38,7 +38,7 @@ def computeHeterozygosit(maj,min):
 """
 
 def computeHeterozygosity(c):
-	cov=c[0]+[c1]
+	cov=c[0]+c[1]
 	if cov==0:
 		return 0.0
 	fcov=float(cov)
