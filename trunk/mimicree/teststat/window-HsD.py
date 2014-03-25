@@ -3,28 +3,30 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
-from syncIO import SyncReaderMajMin
+from syncIO import SyncReaderMajMin, SyncWindowReader
 
 
 
-        
 
-
-def parse_line(entries,baselist,derivedlist):
+def parse_line(syncs,baselist,derivedlist):
 	# (C,A),(108,45),(90,47))
-	parsed=entries
-	
-	derc=[0,0]
-	basec=[0,0]
-	for i in derivedlist:
-		key=i-1
-		derc[0]+=parsed[key][0]
-		derc[1]+=parsed[key][1]
-	for i in baselist:
-		key=i-1
-		basec[0]+=parsed[key][0]
-		basec[1]+=parsed[key][1]
-	return (basec,derc)
+	dera=[]
+	basea=[]
+	for chr,pos,mami,parsed in syncs:
+		derc=[0,0]
+		basec=[0,0]
+		for i in derivedlist:
+			key=i-1
+			derc[0]+=parsed[key][0]
+			derc[1]+=parsed[key][1]
+		for i in baselist:
+			key=i-1
+			basec[0]+=parsed[key][0]
+			basec[1]+=parsed[key][1]
+		dera.append(derc)
+		basea.append(basec)
+	return (basea,dera)
+
 
 
 """
@@ -61,12 +63,29 @@ def computeDivergence(c1,c2):
 	return div
 
 
-def get_hshc(basec,derc):
-	hs=computeHeterozygosity(derc)
-	hc=computeHeterozygosity(basec)
-	if hc<0.00000000000001:
+def computeDivergenceSum(count1,count2):
+	assert(len(count1)==len(count2))
+	
+	disum=0.0
+	for c1,c2 in zip(count1,count2):
+		disum+=computeDivergence(c1,c2)
+	return disum
+
+def computeHeterozygositySum(count):
+	hsum=0.0
+	for c in count:
+		hsum+=computeHeterozygosity(c)
+	return hsum
+	
+
+
+
+def get_hscwindow(basec,derc):
+	hs=computeHeterozygositySum(derc)
+	d=computeDivergenceSum(basec,derc)
+	if d<0.00000000000001:
 		return 0.0
-	return hs/hc
+	return hs/d
 
 def parse_comparestring(comp):
 	a=comp.split(",")
@@ -87,11 +106,12 @@ parser.add_option("--compare",dest="comp",help="A comparision string as with the
 
 baselist,derivedlist=parse_comparestring(options.comp)
 
-for chr,pos,mami,s in SyncReaderMajMin(options.sync):
-	# [2L,15,(C,A),(108,45),(90,47))
-	basec,derc=parse_line(s,baselist,derivedlist)
-	hshc=get_hshc(basec,derc)
+for chr,start,end,syncs in SyncWindowReader(SyncReaderMajMin(options.sync),1000):
+	if len(syncs)==0:
+		continue
 	
-	topr=[chr,str(pos),str(hshc)]
+	basec,derc=parse_line(syncs,baselist,derivedlist)
+	hsc=get_hscwindow(basec,derc)
+	
+	topr=[chr,str(start),str(hsc)]
 	print "\t".join(topr)
-        
