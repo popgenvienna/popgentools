@@ -49,9 +49,17 @@ while(my $l=<$ifh>)
     my $chr=$s->{chr};
     if(exists($an->{$chr}))
     {
+        my $fam=$an->{$chr}{family};
+        $famstat->{$fam}++;
         $mapedte++;
     }
    
+}
+
+while(my($fam,$count)=each %$famstat)
+{
+    my $fraction=(100.0*$count)/$mapedte;
+    print "$fam\t$count\t$fraction\n";
 }
 
 print "Mapped\t$maped\n";
