@@ -2,7 +2,7 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
-import zipfile
+import gzip
 
 def get_selected_hash(file):
 	s=set([])
@@ -28,7 +28,7 @@ for i in range(2,len(sys.argv)):
 	
 fh=None
 if(chrguidefile.endswith(".gz")):
-	fh=zipfile.ZipFile(chrguidefile,'r')
+	fh=gzip.open(chrguidefile,mode='rb')
 else:
 	fh=open(chrguidefile)
 	
