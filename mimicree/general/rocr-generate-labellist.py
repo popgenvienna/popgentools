@@ -2,7 +2,7 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
-
+import zipfile
 
 def get_selected_hash(file):
 	s=set([])
@@ -26,7 +26,14 @@ for i in range(2,len(sys.argv)):
 	filename=sys.argv[i]
 	selectedar.append(get_selected_hash(filename))
 	
-for line in open(chrguidefile):
+fh=None
+if(zipfile.is_zipfile(chrguidefile)):
+	fh=zipfile.ZipFile(chrguidefile,'r')
+else:
+	fh=open(chrguidefile)
+	
+	
+for line in fh:
 	line=line.rstrip()
 	a=line.split("\t")
 	chr,pos=(a[0],a[1])
