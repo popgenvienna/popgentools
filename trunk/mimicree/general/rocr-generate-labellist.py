@@ -27,7 +27,7 @@ for i in range(2,len(sys.argv)):
 	selectedar.append(get_selected_hash(filename))
 	
 fh=None
-if(zipfile.is_zipfile(chrguidefile)):
+if(chrguidefile.endswith(".gz")):
 	fh=zipfile.ZipFile(chrguidefile,'r')
 else:
 	fh=open(chrguidefile)
