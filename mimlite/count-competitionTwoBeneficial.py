@@ -46,8 +46,10 @@ ff=FitnessFunctionNormal(s1,h1,s2,h2)
 for i in range(0,repsim):
         sA="S"
         sB="S"
+        sab="S"
         genA=int(maxgen)
         genB=int(maxgen)
+        genab=int(maxgen)
         pop=PopGenerator.ini_competition(twone,p1,p2)
         counter=0
         while(not pop.is_fixed()):
@@ -55,17 +57,20 @@ for i in range(0,repsim):
                 counter+=1
                 
                 if(sA =="S" and pop.is_fixedA()):
-                        sA=pop.statusA()
+                        sA=pop.status(pop.countA())
                         genA=counter
                 if(sB =="S" and pop.is_fixedB()):
-                        sB=pop.statusB()
+                        sB=pop.status(pop.countB())
                         genB=counter
+                if(sab =="S" and pop.is_fixedab()):
+                        sab=pop.status(pop.countab())
+                        genab=counter
                 if counter>=maxgen:
                         break      
 
-        print "1\t{0}\t{1}\t{2}".format(sA,genA,i+1)
-        print "2\t{0}\t{1}\t{2}".format(sB,genB,i+1)
-
+        print "A\t{0}\t{1}\t{2}".format(sA,genA,i+1)
+        print "B\t{0}\t{1}\t{2}".format(sB,genB,i+1)
+        print "ab\t{0}\t{1}\t{2}".format(sab,genab,i+1)
 
 
 

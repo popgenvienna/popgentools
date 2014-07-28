@@ -30,33 +30,37 @@ class Population:
                 return float(self.__countB)/float(self.__twone)
                 
         def get_frequencyab(self):
-                cab=0
-                for d in self.__diploids:
-                        cab+=d.countab()
+                cab=self.countab()
                 return float(cab)/float(self.__twone)
                 
         def get_frequencyAB(self):
+                cAB=self.countAB()
+                return float(cAB)/float(self.__twone)
+        
+        def countAB(self):
                 cAB=0
                 for d in self.__diploids:
                         cAB+=d.countAB()
-                return float(cAB)/float(self.__twone)
-
-        def statusA(self):
-                twone=int(self.__twone)
-                counta=self.__countA
-                if(counta==0):
-                        return "L"
-                elif(counta==twone):
-                        return "F"
-                else:
-                        return "S"
+                return cAB
         
-        def statusB(self):
+        def countA(self):
+                return self.__countA
+        
+        def countB(self):
+                return self.__countB
+
+        def countab(self):
+                cab=0
+                for d in self.__diploids:
+                        cab+=d.countab()
+                return cab
+
+        def status(self,count):
                 twone=int(self.__twone)
-                countb=self.__countB
-                if(countb==0):
+
+                if(count==0):
                         return "L"
-                elif(countb==twone):
+                elif(count==twone):
                         return "F"
                 else:
                         return "S"
@@ -131,6 +135,23 @@ class Population:
                         return False
                 else:
                         return True
+        
+        def is_fixedAB(self):
+                twone=int(self.__twone)
+                countAB=self.countAB()
+                if(countAB>0 and countAB<twone):
+                        return False
+                else:
+                        return True
+
+        def is_fixedab(self):
+                twone=int(self.__twone)
+                countab=self.countab()
+                if(countab>0 and countab<twone):
+                        return False
+                else:
+                        return True
+                
                 
         def is_fixed(self):
                 isfixedA=self.is_fixedA()
@@ -181,6 +202,21 @@ class Population:
         
                         
 class PopGenerator:
+
+        @classmethod
+        def ini_subfrequency(cls,twone,p1,p2):
+                assert(p2<p1)
+                
+                sc=int(p2*twone)
+                tc=int(p1*twone)-sc
+                oc=twone-sc-tc
+                gametecol=[(1,1) for i in range(0,sc)] +[(1,0) for i in range(0,tc)] + [(0,0) for i in range(0,oc)]
+                diploids=[]
+                while(len(gametecol)>0):
+                        gamete1=gametecol.pop(int(random.random()*len(gametecol)))
+                        gamete2=gametecol.pop(int(random.random()*len(gametecol)))
+                        diploids.append(Diploid(gamete1,gamete2)) 
+                return Population(diploids)
         
         @classmethod
         def ini_complete_linkage(cls,twone,p):
