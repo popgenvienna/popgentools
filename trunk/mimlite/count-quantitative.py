@@ -79,7 +79,6 @@ for rep in range(0,repsim):
         while(not pop.is_fixed()):
                 pop=pop.getNextGeneration(twone,fitnesCalc,phenocontri)
                 counter+=1
-                
                 for i in range(0,snpcount):
                         if(sN[i] =="S" and pop.is_fixedAt(i)):
                                 sN[i]=pop.get_statusAt(i)

@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+from scipy.stats import norm
+import random
+import collections
 
 class FitnessCalculator:
         def __init__(self,fitmin,fitmax,mean,std):
@@ -19,8 +22,6 @@ class FitnessCalculator:
                 fitness+=self.__fitmin
                 return fitness
                 
-
-
 class Diploid:
         def __init__(self,hap1,hap2,phenotypicContribution):
                 """
@@ -87,13 +88,45 @@ class Population:
                 self.__twone=float(2.0 * len(diploids))
                 if(self.__twone==0):
                         raise ValueError("Invalid population size; must be larger than zero")
-
-       
-        def get_frequencyAt(self,n):
+        def countSNPs(self):
+                return self.__diploids[0].countSNPs()
+                
+        def get_countAt(self,n):
                 sum=0
                 for dipl in self.__diploids:
                         sum+=dipl.genotypeAt(n)
+                return sum
+       
+        def get_frequencyAt(self,n):
+                sum=self.get_countAt(n)
                 return float(sum)/float(self.__twone)
+                
+        
+        def get_statusAt(self,n):
+                sum=self.get_countAt(n)
+                twone=int(self.__twone)
+                if(sum==0):
+                        return "L"
+                elif(sum==twone):
+                        return "F"
+                else:
+                        return "S"
+        
+        def is_fixedAt(self,i):
+                countn=self.get_countAt(i)
+                if(countn>0 and countn<self.__twone):
+                        return False
+                else:
+                        return True
+                
+        def is_fixed(self):
+                twone=int(self.__twone)
+                fixed=True
+                for i in range(0,self.countSNPs()):
+                        fixedAt=self.is_fixedAt(i)
+                        if(not fixedAt):
+                                fixed=False
+                return fixed
 
         def get_relative_phenotypes(self):
                 toret=[]

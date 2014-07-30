@@ -3,7 +3,6 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
-from scipy.stats import norm
 from Quantitative import *
 
 
