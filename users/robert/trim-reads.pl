@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Pod::Usage;
 use Getopt::Long;
-use IO::Uncompress::Gunzip;
+use IO::Compress::Gzip;
 #use Pileup;
     my $minLength=0;
 
@@ -150,62 +150,13 @@ trim-fastq.pl - Perform quality filtering of fastq files
 
 The input file, or the input file of the first read, in fastq format. Mandatory parameter
 
-=item B<--input2>
-
-The input file of the second read, in fastq format. In case this file is provided the software will switch to paired read mode instead of single read mode
-
-=item B<--output1>
+=item B<--output>
 
 The output file of the first read. Will be in fastq. Mandatory parameter
 
-=item B<--output2>
-
-The output file of the second read;. Will be in fastq. Mandatory parameter if paired end mode is used
-
-=item B<--outputse>
-
-The output file of the single ends. Will be in fastq. Mandatory parameter if paired end mode is used
-
-=item B<--quality-threshold>
-
-minimum average quality; A modified Mott algorithm is used for trimming; the threshold is used for calculating a score: score = quality_at_base - threshold; default=20
-
-=item B<--fastq-type>
-
-The encoding of the quality characters; Must either be 'sanger' or 'illumina'; 
-
- Using the notation suggested by Cock et al (2009) the following applies:
- 'sanger'   = fastq-sanger: phred encoding; offset of 33
- 'solexa'   = fastq-solexa: -> NOT SUPPORTED
- 'illumina' = fastq-illumina: phred encoding: offset of 64
- 
- See also:
- Cock et al (2009) The Sanger FASTQ file format for sequecnes with quality socres,
- and the Solexa/Illumina FASTQ variants; 
-
-default=illumina
-
-=item B<--discard-internal-N>
-
-flag, if set reads having internal Ns will be discarded; default=off
-
-=item B<--min-length>
+=item B<--length>
 
 The minimum length of the read after trimming; default=40
-
-
-=item B<--no-trim-quality>
-
-toggle switch: switch of trimming of quality
-
-=item B<--no-5p-trim>
-
-togle switch; Disable 5'-trimming (quality and 'N'); May be useful for the identification of duplicates when using trimming of reads.
-Duplicates are usually identified by the 5' mapping position which should thus not be modified by trimming. default=off
-
-=item B<--disable-zipped-output>
-
-Dissable zipped output
 
 =item B<--quit>
 
