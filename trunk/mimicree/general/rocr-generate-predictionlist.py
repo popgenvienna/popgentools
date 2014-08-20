@@ -2,12 +2,18 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
+import gzip
 
 
 class ResultReader:
 	def __init__(self,file):
 		self.__file=file
-		self.__fh=open(file)
+		fh=None
+		if(chrguidefile.endswith(".gz")):
+			fh=gzip.open(file,mode='rb')
+		else:
+			fh=open(file)
+		self.__fh=fh
 	
 	"""
 		line=""
