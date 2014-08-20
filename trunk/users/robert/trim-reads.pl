@@ -32,12 +32,15 @@ my  $ofh = new IO::Compress::Gzip $output or die "Could not open gzipped output 
 
             
 my $fastqr=FastqReader->new($input);
+my $counter=1;
 while(1)
         {
-         my($firstheader,$nucleotide,$secondheader,$quality)=$fastqr->nextRead();
+        my($firstheader,$nucleotide,$secondheader,$quality)=$fastqr->nextRead();
+        die "empty line in $input line number $counter; $firstheader, $nucleotide, $secondheader, $quality" if length($nucleotide)==0 or length($quality) ==0 or length($firstheader)==0;
         $nucleotide=substr($nucleotide,0,$minLength);
         $quality=substr($quality,0,$minLength);
         printFastq($ofh,$firstheader,$nucleotide,$secondheader,$quality);
+        $counter++;
         }
     
 
