@@ -66,7 +66,7 @@ for chr,pos,temp,mami in SyncReaderMajMin(options.input):
 			ssxyH[toco]+=amf*bmf
 
 
-print "to compare {0}".format(tocompare)
+print "to compare {0}".format(toCompare)
 print "min coverage {0}".format(mincov)
 print "min count {0}".format(mincount)
 for k in nH.keys():
