@@ -31,7 +31,19 @@ class ResultReader:
 			
 	def buffer(self):
 		self.__buffer=self.__lastline
-	
+		
+	def read(self):
+		line=self.__getnext();
+		if line=="":
+			return ("","","")
+		self.__lastline=line
+		line=line.rstrip('\n');
+		a=line.split()
+		chr=a[0]
+		pos=a[1]
+		sig=a[-1]
+		return (chr,pos,sig)
+		
 	def next(self):
 		line=self.__getnext();
 		if line=="":
@@ -54,7 +66,7 @@ for i in range(2,len(sys.argv)):
 for activechr,activepos,sig in guidereader:
 	topr=[]
 	for i in range(0,len(readar)):
-		chr,pos,sig=readar[i].next()
+		chr,pos,sig=readar[i].read()
 		if(chr==activechr and pos==activepos):
 			topr.append(sig)
 		else:
