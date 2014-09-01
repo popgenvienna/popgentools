@@ -9,7 +9,7 @@ class ResultReader:
 	def __init__(self,file):
 		self.__file=file
 		fh=None
-		if(chrguidefile.endswith(".gz")):
+		if(file.endswith(".gz")):
 			fh=gzip.open(file,mode='rb')
 		else:
 			fh=open(file)
