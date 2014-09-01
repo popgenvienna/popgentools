@@ -21,10 +21,10 @@ class ResultReader:
 		return self
 	
 	def __getnext(self):
-		toret=""
 		if(self.__buffer!=""):
 			toret=self.__buffer
 			self.__buffer=""
+			return toret
 		else:
 			return self.__fh.readline()
 			
@@ -59,7 +59,7 @@ for activechr,activepos,sig in guidereader:
 			topr.append(sig)
 		else:
 			topr.append("0.0")
-			reader[i].buffer()
+			readar[i].buffer()
 	toprstr="\t".join(topr)
 	print(toprstr)
 	
