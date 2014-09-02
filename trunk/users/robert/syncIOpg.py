@@ -139,7 +139,6 @@ class SyncReaderRevAllele:
 	[2L, 15, A, ((5,10),(10,12))]
 	"""
 	def __init__(self,file):
-		self.__precision=0.00000000000000001
 		self.__filename=file
 		self.__filehandle=open(file,"r")
 	
@@ -173,12 +172,11 @@ class SyncReaderRevAllele:
 			a=map(float,e.split(":")) # float conversions
 			np={'A':a[0],'T':a[1],'C':a[2],'G':a[3]}
 			cov=a[0]+a[1]+a[2]+a[3]
-			if(cov < self.__precision):
-				parsed.append((0,cov))
-			elif(refc=="N"):
+
+			if(refc not in np):
 				parsed.append((0,cov))
 			else:
-				parsed.append((refc,cov))
+				parsed.append((np[refc],cov))
 		return parsed
 
 
