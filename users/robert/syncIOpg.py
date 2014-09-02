@@ -129,14 +129,14 @@ class SyncReaderMajMin:
 
 class SyncReaderRevAllele:
 	"""
-	A light-weight sync-reader. Provides the frequency of the reference allele
+	A light-weight sync-reader. Provides the count of the reference allele and the coverage
 	
-	returns chromosome, position, refChar (f_pop1, f_pop2, f_pop3,...)
+	returns chromosome, position, refChar ((rcount_p1,cov_p1), (rcount_p2,cov_p2),...)
 	
 	For example
 	2L	15	A	45:0:108:0:0:0	47:0:90:0:0:0
 	produces
-	[2L, 15, A, (0.29,0.34)]
+	[2L, 15, A, ((5,10),(10,12))]
 	"""
 	def __init__(self,file):
 		self.__precision=0.00000000000000001
@@ -174,12 +174,11 @@ class SyncReaderRevAllele:
 			np={'A':a[0],'T':a[1],'C':a[2],'G':a[3]}
 			cov=a[0]+a[1]+a[2]+a[3]
 			if(cov < self.__precision):
-				parsed.append(0.0)
+				parsed.append((0,cov))
 			elif(refc=="N"):
-				parsed.append(0.0)
+				parsed.append((0,cov))
 			else:
-				af=np[refc]/cov
-				parsed.append(af)
+				parsed.append((refc,cov))
 		return parsed
 
 
