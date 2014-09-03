@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import gzip
 
 
 class PopulationHaplotype:
@@ -49,19 +50,28 @@ class PopulationHaplotype:
 class HaplotypeIO:
 	
 	@classmethod
-	def genotypeCount(cls,inputFile):
+	def genotypeCount(cls,file):
 		"""
 		Return the number of genotypes present in a input file
 		"""
-		fh=open(inputFile)
+		fh=None
+		if(file.endswith(".gz")):
+			fh=gzip.open(file,mode='rb')
+		else:
+			fh=open(file)
 		line=fh.next()
 		fh.close()
 		pa=HaplotypeIO.parseLine(line)
 		return pa.genotypeCount
 	
 	@classmethod
-	def haplotypeCount(cls,inputFile):
-		fh=open(inputFile)
+	def haplotypeCount(cls,file):
+		fh=None
+		if(file.endswith(".gz")):
+			fh=gzip.open(file,mode='rb')
+		else:
+			fh=open(file)
+		line=fh.next()
 		line=fh.next()
 		fh.close()
 		pa=HaplotypeIO.parseLine(line)
