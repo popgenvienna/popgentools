@@ -6,8 +6,7 @@ import copy
 import math
 import random
 from Haplotype import *
-
-
+import gzip
 
 def createRandomIndices(fullSize,subSize):
 	toDraw=list(range(0,fullSize))
@@ -23,7 +22,12 @@ parser.add_option("--haplotypes", dest="haplotypes", help="the haplotype file")
 parser.add_option("--2Ne", dest="samplesize",help="the number of chromosomes (haplotypes) to sample")
 parser.add_option("--output",dest="output", help="the output file")
 (options, args) = parser.parse_args()
-ofh=open(options.output,"w")
+
+f = gzip.open('file.txt.gz', 'wb')
+outputfile=options.output
+if(not outputfile.endswith(".gz")):
+	outputfile+=".gz"
+ofh=gzip.open(outputfile, 'wb')
 # Determine sample size etc
 subsamplesize=int(options.samplesize)
 fullsamplesize=HaplotypeIO.haplotypeCount(options.haplotypes)
@@ -34,7 +38,15 @@ randindex=createRandomIndices(fullsamplesize,subsamplesize)
 print subsamplesize
 print fullsamplesize
 print randindex
-for line in open(options.haplotypes):
+
+fh=None
+file=options.haplotype
+if(file.endswith(".gz")):
+	fh=gzip.open(file,mode='rb')
+else:
+	fh=open(file)
+
+for line in fh:
 	line=line.rstrip()
 	p=HaplotypeIO.parseLine(line)
 	haps=p.haplotypes
