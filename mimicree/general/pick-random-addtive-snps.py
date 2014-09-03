@@ -4,6 +4,7 @@ import math
 import re
 import random
 from optparse import OptionParser, OptionGroup
+import gzip
 
 
 # Author: Dr. Robert Kofler
@@ -61,7 +62,14 @@ h=float(options.het)
 s=float(options.selcoef)
 
 cand=[]
-for line in open(options.input):
+file=options.input
+fh=None
+if(file.endswith(".gz")):
+	fh=gzip.open(file,mode='rb')
+else:
+	fh=open(file)
+
+for line in fh:
 	if(random.random()>pickfreq):
 		continue
 		# process only loci that will end up in the  initial set
