@@ -23,7 +23,7 @@ parser.add_option("--2Ne", dest="samplesize",help="the number of chromosomes (ha
 parser.add_option("--output",dest="output", help="the output file")
 (options, args) = parser.parse_args()
 
-f = gzip.open('file.txt.gz', 'wb')
+
 outputfile=options.output
 if(not outputfile.endswith(".gz")):
 	outputfile+=".gz"
@@ -40,7 +40,7 @@ print fullsamplesize
 print randindex
 
 fh=None
-file=options.haplotype
+file=options.haplotypes
 if(file.endswith(".gz")):
 	fh=gzip.open(file,mode='rb')
 else:
