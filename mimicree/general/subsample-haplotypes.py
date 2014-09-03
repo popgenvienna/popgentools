@@ -23,11 +23,11 @@ parser.add_option("--2Ne", dest="samplesize",help="the number of chromosomes (ha
 parser.add_option("--output",dest="output", help="the output file")
 (options, args) = parser.parse_args()
 
-
 outputfile=options.output
 if(not outputfile.endswith(".gz")):
 	outputfile+=".gz"
 ofh=gzip.open(outputfile, 'wb')
+
 # Determine sample size etc
 subsamplesize=int(options.samplesize)
 fullsamplesize=HaplotypeIO.haplotypeCount(options.haplotypes)
@@ -45,6 +45,7 @@ if(file.endswith(".gz")):
 	fh=gzip.open(file,mode='rb')
 else:
 	fh=open(file)
+
 
 for line in fh:
 	line=line.rstrip()
