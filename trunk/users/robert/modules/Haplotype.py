@@ -71,6 +71,8 @@ class HaplotypeIO:
 	@classmethod
 	def parseLine(cls,line):
 		a=line.split("\t");
+		if(len(a)<5):
+			raise StandardError("could not split line properly"+line)
 		(major,minor)=a[3].split("/")
 		genotypes=a[4].split(" ")
 		haplotypes=[]
