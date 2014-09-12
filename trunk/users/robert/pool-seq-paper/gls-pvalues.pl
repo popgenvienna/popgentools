@@ -100,19 +100,21 @@ exit(0);
 			#[1] 0.003583457
 			my $line=<$ifh>;
 			last unless $line;
+			my $dispersion=<$ifh>;
 			my $pvalue_lib=<$ifh>;
 			my $pvalue_rep=<$ifh>;
-			chomp $line; chomp $pvalue_lib; chomp $pvalue_rep;
+			chomp $line; chomp $dispersion; chomp $pvalue_lib; chomp $pvalue_rep;
 			$line=~s/^\S+\s//;
 			$line=~s/^"//;
 			$line=~s/"$//;
 			$line=~s/\\t/\t/g;
+			$dispersion=~s/^\S+\s//;
 			$pvalue_lib=~s/^\S+\s//;
 			$pvalue_rep=~s/^\S+\s//;
 			#$pvalue="1.0" if $pvalue eq "NaN"; 	# stupid mantelhaenszeltest prodcues NaN for example mantelhaen.test(array(c(100,100,0,0,100,100,0,0,100,100,0,0),dim=c(2,2,3)),alternative=c("two.sided"))
 								# this is clearly no differentiation thus 1.0 (necessary as it fucks up sorting by significance)
 
-			print $ofh $line."\t".$pvalue_lib."\t".$pvalue_rep."\n";
+			print $ofh $line."\t".$dispersion."\t".$pvalue_lib."\t".$pvalue_rep."\n";
 		}
 		close $ofh;
 		close $ifh;
@@ -135,13 +137,14 @@ getdispersion<-function(counts)
   model1a= glm(counts~lib*rep+allele*lib,data=data,family=quasipoisson)
   model1b= glm(counts~lib*rep+allele*rep,data=data,family=quasipoisson)
   model3= glm(counts~lib*rep+allele*lib + allele*rep,data=data,family=quasipoisson)
-  
+
   a1<-anova(model1a,model3,test="LRT") # replicate Influence
   a2<-anova(model1b,model3,test="LRT") # library Influence
   
+  dispersion<-summary(model3)\$dispersion
   p.replicate <- a1\$Pr[2]
   p.library <- a2\$Pr[2]
-  return(c(p.library,p.replicate))
+  return(c(dispersion,p.library,p.replicate))
 }
 PERLSUCKS
 
@@ -212,6 +215,7 @@ print("$line")
 tmp<-getdispersion($countstring)
 print(tmp[1])
 print(tmp[2])
+print(tmp[3])
 PERLSUCKS
 
 
