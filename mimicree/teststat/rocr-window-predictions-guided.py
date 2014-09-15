@@ -41,7 +41,7 @@ class ResultReader:
 		chr=a[0]
 		pos=a[1]
 		sig=a[-1]
-		return (chr,pos,sig)
+		return (chr,int(pos),sig)
 		
 	def next(self):
 		line=self.__getnext();
@@ -53,7 +53,7 @@ class ResultReader:
 		chr=a[0]
 		pos=a[1]
 		sig=a[-1]
-		return (chr,pos,sig)
+		return (chr,int(pos),sig)
 
 
 class GuideWindowReader:
