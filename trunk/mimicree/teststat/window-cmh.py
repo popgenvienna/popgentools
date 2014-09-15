@@ -102,7 +102,8 @@ parser = OptionParser()
 parser.add_option("--sync",dest="sync",help="A file containing the cmh results")
 parser.add_option("--win",dest="win",help="the window size")
 (options, args) = parser.parse_args()
-winsize=int(options.sync)
+
+winsize=int(options.win)
 
 for chr,start,cmhs in GuideWindowCMHReader(options.sync,winsize):
 	if len(cmhs)==0:
