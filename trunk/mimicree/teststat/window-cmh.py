@@ -94,7 +94,6 @@ def parse_line(syncs,baselist,derivedlist):
 
 parser = OptionParser()
 parser.add_option("--sync",dest="sync",help="A file containing the cmh results")
-parser.add_option("--compare",dest="comp",help="A comparision string as with the cmh-test")
 (options, args) = parser.parse_args()
 
 for chr,start,cmhs in GuideWindowCMHReader(options.sync,1000):
