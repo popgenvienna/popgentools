@@ -89,16 +89,17 @@ def get_selected_hash(file):
 		s.add(key)
 	return s
 
+winsize=int(sys.argv[1])
 
-chrguidefile=sys.argv[1]
+chrguidefile=sys.argv[2]
 
 selectedar=[] # content will be sets with the key: "chr:pos" as string
-for i in range(2,len(sys.argv)):
+for i in range(3,len(sys.argv)):
 	filename=sys.argv[i]
 	selectedar.append(get_selected_hash(filename))
 
 
-for chr,pos,keys in GuideWindowReader(chrguidefile,1000):
+for chr,pos,keys in GuideWindowReader(chrguidefile,winsize):
 	if len(keys)==0:
 		continue
 	
