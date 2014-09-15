@@ -100,9 +100,11 @@ def parse_line(syncs,baselist,derivedlist):
 
 parser = OptionParser()
 parser.add_option("--sync",dest="sync",help="A file containing the cmh results")
+parser.add_option("--win",dest="win",help="the window size")
 (options, args) = parser.parse_args()
+winsize=int(options.sync)
 
-for chr,start,cmhs in GuideWindowCMHReader(options.sync,1000):
+for chr,start,cmhs in GuideWindowCMHReader(options.sync,winsize):
 	if len(cmhs)==0:
 		continue
 	sum=0.0
