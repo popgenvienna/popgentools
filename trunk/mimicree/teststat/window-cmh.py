@@ -3,11 +3,17 @@ import sys
 import random
 from optparse import OptionParser, OptionGroup
 import collections
+import gzip
 
 
 class GuideWindowCMHReader:
 	def __init__(self, guidefile, windowsize):
-		self.__gfh=open(guidefile)
+		fh=None
+		if(guidefile.endswith(".gz")):
+			fh=gzip.open(guidefile,mode='rb')
+		else:
+			fh=open(guidefile)
+		self.__gfh=fh
 		self.__windowsize=windowsize
 		self.__buffer=None
 		self.__activechr=None
