@@ -55,13 +55,13 @@ parser.add_option("--input",dest="input",help="the input file as sync")
 sH=collections.defaultdict(lambda:0)
 ssH=collections.defaultdict(lambda:0)
 nH=collections.defaultdict(lambda:0)
-nunion=0;
+nunion=0
 
 for chr,pos,cov in SyncCovReader(options.input):
 	coveredinany=False
 	for i,c in enumerate(cov):
 		if c>0:
-			coverdinany=True
+			coveredinany=True
 			sH[i]+=c
 			ssH[i]+=c*c
 			nH[i]+=1
