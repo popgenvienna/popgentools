@@ -55,23 +55,29 @@ parser.add_option("--input",dest="input",help="the input file as sync")
 sH=collections.defaultdict(lambda:0)
 ssH=collections.defaultdict(lambda:0)
 nH=collections.defaultdict(lambda:0)
+nunion=0;
 
 for chr,pos,cov in SyncCovReader(options.input):
+	coveredinany=False
 	for i,c in enumerate(cov):
 		if c>0:
+			coverdinany=True
 			sH[i]+=c
 			ssH[i]+=c*c
 			nH[i]+=1
+	if coveredinany:
+		nunion+=1
 
 
 print "i\tmu\tstddev\tcv"
 for k in sorted(sH.keys()):
 	n=nH[k]
 	mu=sH[k]/n
+	muunion=sH[k]/nunion
 	si= (ssH[k] - (sH[k]**2/n))/n
 	s=math.sqrt(si)
 	cv=s/mu
-	print k,mu,si,cv,n
+	print k,mu,muunion,si,cv,n
 
 
 
