@@ -24,6 +24,8 @@ def generate_cmhcommand(cmhpath,input,output,rep,gen):
         base=1+baseoffset*i
         der=base+sampleoffset
         tocomp.append("{0}-{1}".format(base,der))
+    if rep==1:
+        tocomp.append(tocomp[0])
 
     temppr=",".join(tocomp)
     topr="perl {0} --min-count 1 --min-coverage 1 --max-coverage 100000 --min-logpvalue 0.0 --population {1} --input {2} --output {3}".format(cmhpath,temppr,input, output)
