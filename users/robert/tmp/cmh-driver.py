@@ -53,20 +53,20 @@ for c in commandlist:
 
 
 def submit_job_max_len(commandlist, max_processes):
-    from subprocess import PIPE
     import subprocess
     import time
     sleep_time = 3.0
     processes = list()
     for command in commandlist:
         print 'running {n} processes. Submitting {proc}.'.format(n=len(processes),proc=str(command))
-        processes.append(subprocess.Popen(command, shell=False, stdout=None,stdin=PIPE))
+        processes.append(subprocess.Popen(command, shell=True, stdout=None))
         while len(processes) >= max_processes:
             time.sleep(sleep_time)
-        processes = [proc for proc in processes if proc.poll() is None]
+            processes = [proc for proc in processes if proc.poll() is None]
     while len(processes) > 0:
         time.sleep(sleep_time)
         processes = [proc for proc in processes if proc.poll() is None]
 
 submit_job_max_len(commandlist, max_processes=8)
+print "Done"
 
