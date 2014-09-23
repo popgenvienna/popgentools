@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import os
-
+import sys
 
 
 replicates=[1,3,5,10,15,20]
 generations=[10,20,30,40,50,60]
-cmhpath="~lib/../popoolation2/cmh-test.pl"
+cmhpath=sys.argv[1]
 
 
 def generate_cmhcommand(cmhpath,input,output,rep,gen):
