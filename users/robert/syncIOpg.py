@@ -218,3 +218,32 @@ class SyncReaderATCG:
 			a=map(float,e.split(":"))
 			conv.append(a)
 		return conv
+
+class SyncWriterATCG:
+	"""
+	A light-weight sync writer; requires the counts in ATCGNDel
+	requires chromosome, position, refChar ([A,T,C,G,N,del], [A,T,C,G,N,del],...) # first ATCGNdel for first population, second for second ...
+	"""
+	def __init__(self,file):
+		self.__filename=file
+		sefl.__filehandle=open(file,"w")
+	
+	def write(self,chr,pos,refChar,pops):
+		topr=SyncWriterATCG.format(chr,pos,refChar,pops)
+		self.__filehandle.write(topr+"\n")
+	
+	@classmethod
+	def format(cls,chr,pos,refChar,pops):
+		tojoin=[str(chr),str(pos),str(refChar)]
+		formpops=[]
+		for p in pops:
+			psi=[str(int(i)) for i in p]
+			fp=":".join(psi)
+			formpops.append(fp)
+		tojoin.extend(formpops)
+		topr="\t".join(tojoin)
+		return topr
+		
+		
+	def close():
+		self.__filehandle.close()
