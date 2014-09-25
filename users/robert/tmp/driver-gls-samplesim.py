@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import multiprocessing
 
 # --min-count 5 --min-coverage 5 --max-coverage 100 --input sim-futsch2/Dmel-c30-91-92-93-105.sim.sync --output gls/Dmel-c30-91-92-93-105.mc5.simf2.gls.txt
 path_gls="/Volumes/Temp2/Robert/popgentools/users/robert/pool-seq-paper/gls-pvalues.pl"
