@@ -4,7 +4,7 @@ from optparse import OptionParser, OptionGroup
 import copy
 import math
 import random
-from  syncIO import *
+from  syncIOpg import *
 
 def get_meshed(populations):
 	c=[0,0,0,0]
