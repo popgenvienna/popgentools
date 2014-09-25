@@ -34,6 +34,7 @@ GetOptions(
     "min-count=s"   =>\$mincount,
     "min-coverage=i"=>\$mincoverage,
     "max-coverage=s"=>\$usermaxcoverage,
+    "remove-temp"   =>\$removetemp,
     "test"          =>\$test,
     "help"	    =>\$help
 ) or pod2usage(-msg=>"Wrong options",-verbose=>1);
