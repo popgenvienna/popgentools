@@ -14,7 +14,7 @@ outputdir=outputdir.rstrip("/")
 commandpairs=[]
 for i in range(1,simulations+1):
     outputfile="%s/temp%i"%(outputdir,i)
-    samplecommand="python %s --input %s > %s"%s(path_binomial, input,outputfile)
+    samplecommand="python %s --input %s > %s"%(path_binomial, input,outputfile)
     glsfile="%s/n%i.gls"%(outputdir,i)
     glscommand="perl %s --remove-temp --min-count 5 --min-coverage 5 --max-coverage 100 --input %s --output %s"%(path_gls,outputfile,glsfile)
     commandpairs.append([samplecommand,glscommand,i])
