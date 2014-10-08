@@ -18,7 +18,7 @@ def load_file(file):
                 a=l.split("\t")
                 key=a[0]
                 p=tr[key]
-                cor=float(a[5])
+                cor=float(a[-1])
                 content[p[0]][p[1]]=cor
         return content
 
