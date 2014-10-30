@@ -54,6 +54,9 @@ class Population:
                 for d in self.__diploids:
                         cab+=d.countab()
                 return cab
+        
+        def twone(self):
+                return int(self.__twone)
 
         def status(self,count):
                 twone=int(self.__twone)
@@ -263,8 +266,8 @@ class PopGenerator:
                 x12=p1*q2-D
                 x21=q1*p2-D
                 
-                x11,x22,x12=int(x11*twone),int(x22*twone),int(x12*twone)
-                x21=twone-x11-x22-x12
+                x11,x22,x12,x21=int(x11*twone),int(x22*twone),int(x12*twone),int(x21*twone)
+                # x21=twone-x11-x22-x12
                 if(x11<0 or x22 < 0 or x12<0 or x21<0):
                         raise ValueError("Invalid value for rsquared; Impossible combination of allele frequencies and rsquared")
                 
