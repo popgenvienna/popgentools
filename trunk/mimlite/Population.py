@@ -255,18 +255,35 @@ class PopGenerator:
 
         
         @classmethod
+        def __adjustcounts(cls,x11,x22,x12,x21,twone):
+                l=[['x11',x11],['x22',x22],['x12',x12],['x21',x21]]
+                l=sorted(l,key=lambda k:-k[1])
+                while(sum([i[1] for i in l]) > twone):
+                        l[0][1]-=1
+                while(sum([i[1] for i in l]) < twone):
+                        l[0][1]+=1
+                d=dict(l)
+                x11,x22,x12,x21=(d['x11'],d['x22'],d['x12'],d['x21'])
+                return x11,x22,x12,x21
+        
+        @classmethod
         def ini_ld(cls,twone,p1,p2,rsquared):
                
                 q1=1.0-p1
                 q2=1.0-p2
                 div=p1*p2*q1*q2
                 D=math.sqrt(rsquared*div)
-                x11=p1*p2+D
-                x22=q1*q2+D
-                x12=p1*q2-D
-                x21=q1*p2-D
+                fx11=p1*p2+D
+                fx22=q1*q2+D
+                fx12=p1*q2-D
+                fx21=q1*p2-D
                 
-                x11,x22,x12,x21=int(x11*twone),int(x22*twone),int(x12*twone),int(x21*twone)
+                x11,x22,x12,x21=int((fx11*twone)+0.5),int((fx22*twone)+0.5),int((fx12*twone)+0.5),int((fx21*twone)+0.5)
+                x11,x22,x12,x21=  PopGenerator.__adjustcounts(x11,x22,x12,x21,twone)
+                assert(x11+x22+x12+x21==twone)        
+                
+                
+                temp=x11+x22+x12+x21
                 # x21=twone-x11-x22-x12
                 if(x11<0 or x22 < 0 or x12<0 or x21<0):
                         raise ValueError("Invalid value for rsquared; Impossible combination of allele frequencies and rsquared")

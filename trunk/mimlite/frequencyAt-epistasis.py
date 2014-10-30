@@ -42,8 +42,6 @@ assert eh==1 or eh==2
 
 ff=FitnessFunctionEpistasis(s1,h1,s2,h2,e12,eh)
 print  "# snp_id\tgeneration\tfrequency\treplicate"
-pop=PopGenerator.ini_ld(twone,p1,p2,rsquared)
-print "# 2Ne\t{0}".format(pop.twone())
 
 for i in range(0,repsim):
         pop=PopGenerator.ini_ld(twone,p1,p2,rsquared)
