@@ -3,6 +3,26 @@ from scipy.stats import norm
 import random
 import collections
 
+class FitnessCalculatorParser:
+        
+        @classmethod
+        def get_fitnessFunctionDictionary(cls,arguments):
+                ffd={}
+                for t in arguments:
+                        a=t.split(":")
+                        #generation:fitmin:fitmax:mean:stdDev"
+                        generation=int(a[0])
+                        fitmin=float(a[1])
+                        fitmax=float(a[2])
+                        mean=float(a[3])
+                        stdDev=float(a[4])
+                        
+                        ffd[generation]=FitnessCalculator(fitmin,fitmax,mean,stdDev)
+                if 1 not in ffd:
+                        raise Error("Fitness starting at generation 1 needs to be provided; Example of neutral drift in the beginning '--selection 1;0;0;0;0' ")
+                return ffd
+
+
 class FitnessCalculator:
         def __init__(self,fitmin,fitmax,mean,std):
                 self.__fitmin=fitmin

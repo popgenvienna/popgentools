@@ -210,9 +210,9 @@ class PopGenerator:
         def ini_subfrequency(cls,twone,p1,p2):
                 assert(p2<p1)
                 
-                sc=int(p2*twone)
-                tc=int(p1*twone)-sc
-                oc=twone-sc-tc
+                sc=int(p2*twone) # sc=1,1
+                tc=int(p1*twone)-sc # tc=1,0
+                oc=twone-sc-tc # oc=0,0
                 gametecol=[(1,1) for i in range(0,sc)] +[(1,0) for i in range(0,tc)] + [(0,0) for i in range(0,oc)]
                 diploids=[]
                 while(len(gametecol)>0):

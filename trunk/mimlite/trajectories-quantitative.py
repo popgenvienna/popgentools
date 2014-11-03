@@ -87,7 +87,7 @@ def visualize_trajectories(trajectories,output):
 
 parser = OptionParser()
 parser.add_option("--Ne", dest="ne", help="the number of diploid individuals")
-parser.add_option("--selection",dest="selection",help="specifying the selection in the form fitmin:fitmax:mean:stdDev")
+parser.add_option("--selection",action="append",dest="selection",help="specifying the selection in the form generation:fitmin:fitmax:mean:stdDev")
 parser.add_option("--variant-contributions",dest="varcontri",help="A comma separated list specifiying the contribution of every variant to the phenotype")
 parser.add_option("-p",dest="p", help="a comma separated list of starting allele frequencies")
 parser.add_option("--repeat-simulations",dest="repsim")
@@ -98,7 +98,7 @@ parser.add_option("--output-phenotypes",dest="outputpheno",default=None,help="Bo
 repsim = int(options.repsim)
 twone = int(options.ne) * 2
 p = map(float,options.p.split(","))                       # start allele frequencies
-selection = map(float,options.selection.split(":"))        # selection coefficient, mean, standard deviation
+
 phenocontri = map(float, options.varcontri.split(","))               # contribution of the variants to the phenotype
 assert(len(phenocontri) == len(p))
 snpcount=len(phenocontri)
@@ -108,7 +108,7 @@ startc = [int(twone*i) for i in p]
 if(options.outputpheno is not None and repsim>9):
         raise ValueError("Can not print phenotypes for more than 9 simulations; either do not plot phenotypes or use less simulations")
 
-fitnesCalc=FitnessCalculator(selection[0],selection[1],selection[2],selection[3])
+selectiondictionary=FitnessCalculatorParser.get_fitnessFunctionDictionary(options.selection)
 
 # initialize the trajectory array; I fucking hate 3D arrays...
 trajectories=[]
@@ -126,8 +126,10 @@ for rep in range(0,repsim):
                 freq=pop.get_frequencyAt(i)
                 trajectories[i].appendFreq(rep,freq)
         phenotypes[rep].append(pop.get_relative_phenotypes())
-
+        fitnesCalc=None
         for g in range(0, maxgen):
+                if (g+1) in selectiondictionary:
+                        fitnesCalc=selectiondictionary[(g+1)]
                 pop=pop.getNextGeneration(twone,fitnesCalc,phenocontri)
                 phenotypes[rep].append(pop.get_relative_phenotypes())
                 for i in range(0,snpcount):
