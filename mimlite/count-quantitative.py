@@ -48,7 +48,7 @@ def reduce_generations(phenotypes,foldreduction):
 
 parser = OptionParser()
 parser.add_option("--Ne", dest="ne", help="the number of diploid individuals")
-parser.add_option("--selection",dest="selection",help="specifying the selection in the form fitmin:fitmax:mean:stdDev")
+parser.add_option("--selection",action="append",dest="selection",help="specifying the selection in the form generation:fitmin:fitmax:mean:stdDev")
 parser.add_option("--variant-contributions",dest="varcontri",help="A comma separated list specifiying the contribution of every variant to the phenotype")
 parser.add_option("-p",dest="p", help="a comma separated list of starting allele frequencies")
 parser.add_option("--repeat-simulations",dest="repsim")
@@ -58,14 +58,13 @@ parser.add_option("--max-generations",dest="maxgen")
 repsim = int(options.repsim)
 twone = int(options.ne) * 2
 p = map(float,options.p.split(","))                       # start allele frequencies
-selection = map(float,options.selection.split(":"))        # selection coefficient, mean, standard deviation
 phenocontri = map(float, options.varcontri.split(","))               # contribution of the variants to the phenotype
 assert(len(phenocontri) == len(p))
 snpcount=len(phenocontri)
 maxgen = int(options.maxgen)
 startc = [int(twone*i) for i in p]
 
-fitnesCalc=FitnessCalculator(selection[0],selection[1],selection[2],selection[3])
+selectiondictionary=FitnessCalculatorParser.get_fitnessFunctionDictionary(options.selection)
 
 
 
@@ -76,7 +75,10 @@ for rep in range(0,repsim):
         genN=[maxgen for i in range(0,snpcount)]
         pop=PopGenerator.ini_complete_linkage(twone,startc,phenocontri)
         counter=0
+        fitnesCalc=None
         while(not pop.is_fixed()):
+                if (counter+1) in selectiondictionary:
+                        fitnesCalc=selectiondictionary[(counter+1)]
                 pop=pop.getNextGeneration(twone,fitnesCalc,phenocontri)
                 counter+=1
                 for i in range(0,snpcount):

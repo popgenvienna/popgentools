@@ -41,7 +41,7 @@ class TrajectoriesForSNP:
 
 parser = OptionParser()
 parser.add_option("--Ne", dest="ne", help="the number of diploid individuals")
-parser.add_option("--selection",dest="selection",help="specifying the selection in the form fitmin:fitmax:mean:stdDev")
+parser.add_option("--selection",action="append",dest="selection",help="specifying the selection in the form generation:fitmin:fitmax:mean:stdDev")
 parser.add_option("--variant-contributions",dest="varcontri",help="A comma separated list specifiying the contribution of every variant to the phenotype")
 parser.add_option("-p",dest="p", help="a comma separated list of starting allele frequencies")
 parser.add_option("--repeat-simulations",dest="repsim")
@@ -50,7 +50,6 @@ parser.add_option("--snapshots", dest="snapshots",default=None,help="A comma sep
 repsim = int(options.repsim)
 twone = int(options.ne) * 2
 p = map(float,options.p.split(","))                       # start allele frequencies
-selection = map(float,options.selection.split(":"))        # selection coefficient, mean, standard deviation
 phenocontri = map(float, options.varcontri.split(","))               # contribution of the variants to the phenotype
 assert(len(phenocontri) == len(p))
 snpcount=len(phenocontri)
@@ -59,7 +58,7 @@ startc = [int(twone*i) for i in p]
 snapshots=set(map(int, options.snapshots.split(","))) 
 maxgen = max(snapshots)
 
-fitnesCalc=FitnessCalculator(selection[0],selection[1],selection[2],selection[3])
+selectiondictionary=FitnessCalculatorParser.get_fitnessFunctionDictionary(options.selection)
 
 # initialize the trajectory array; I fucking hate 3D arrays...
 
@@ -70,8 +69,11 @@ for rep in range(0,repsim):
         for i in range(0,snpcount):
                 freq=pop.get_frequencyAt(i)
                 print "{0}\t{1}\t{2}\t{3}".format(i+1,0,freq,rep+1)
-                
+        
+        fitnesCalc=None
         for g in range(0, maxgen):
+                if (g+1) in selectiondictionary:
+                        fitnesCalc=selectiondictionary[(g+1)]
                 pop=pop.getNextGeneration(twone,fitnesCalc,phenocontri)
                 if (g+1) in snapshots: 
                         for i in range(0,snpcount):
