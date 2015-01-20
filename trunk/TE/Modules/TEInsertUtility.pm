@@ -77,11 +77,11 @@ sub _parse_teinsert
     $rabs eq "-"    and $rabs=undef;
     $roverlap eq "-"and $roverlap=undef;
     
-    die "Invalid TE Insertion $l\n" unless $chr;
-    die "Invalid TE Insertion $l\n" unless $inspos;
-    die "Invalid TE Insertion $l\n" unless $sitesupport;
-    die "Invalid TE Insertion $l\n" unless $teid;
-    die "Invalid TE Insertion $l\n" unless ($frstart or $rrstart);
+    die "Invalid TE Insertion  (chr:$chr) $l\n" unless $chr;
+    die "Invalid TE Insertion (inspos:$inspos) $l\n"  unless $inspos;
+    die "Invalid TE Insertion (sitesupport:$sitesupport) $l\n" unless $sitesupport;
+    die "Invalid TE Insertion (teid:$teid) $l\n" unless $teid;
+    die "Invalid TE Insertion (frstart: $frstart, $rrstart) $l\n" unless ($frstart or $rrstart);
     
     return TEInsert->new($chr,$inspos,$teid,$order,$fbid,$comment, $frstart,$frend,$fpres,$fabs,$foverlap,$rrstart,$rrend,$rpres,$rabs,$roverlap);
     # INT: chr, inspos, teid, order, fbid, comment, frstart, frend, fpres, fabs, foverlap, rrstart, rrend, rpres, rabs, roverlap
