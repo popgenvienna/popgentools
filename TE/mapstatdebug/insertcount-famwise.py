@@ -1,4 +1,3 @@
-from gtfIO import GTFReader,GTFEntry;
 import sys
 import random
 from optparse import OptionParser, OptionGroup
