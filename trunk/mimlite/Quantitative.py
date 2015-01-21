@@ -198,6 +198,10 @@ class PopGenerator:
         def ini_complete_linkage(cls,twone,startc,phenocontri):
                 
                 gametes=[]
+                # l1 111110000000000
+                # l2 111000000000000
+                # l3 100000000000000
+                # l...
                 
                 for sc in startc:
                         oc=twone-sc
