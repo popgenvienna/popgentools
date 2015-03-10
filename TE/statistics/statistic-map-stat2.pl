@@ -65,7 +65,4 @@ while(my $l=<$ifh>)
 
 print $countsamefam;
 print $countdiffam;
-    
-
-
 exit;
