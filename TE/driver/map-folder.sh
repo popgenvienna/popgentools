@@ -34,4 +34,8 @@ do
 	eval $m2
 	echo $m3
 	eval $m3 
+
+	# cleanup
+	rm $outfolder/raw/${n}_1.sam 
+	rm $outfolder/raw/${n}_2.sam 
 done
