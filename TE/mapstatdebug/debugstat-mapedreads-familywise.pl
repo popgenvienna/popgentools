@@ -63,7 +63,7 @@ foreach  my $fam (@$families)
     my $count=0;
     $count=$famstat->{$fam} if(exists($famstat->{$fam}));
     my $fraction=0.0;
-    $fraction=(100.0*$count)/$mapedte if $mapedte>0;
+    $fraction=(100.0*$count)/$maped if $maped>0;
     print "$fam\t$count\t$fraction\n";
     
 }
