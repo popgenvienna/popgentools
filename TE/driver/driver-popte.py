@@ -58,7 +58,7 @@ perl $popte/genomic-N-2gtf.pl --input $genome > $outfolder/tmp/polyn.gtf
 perl $popte/crosslink-te-sites.pl --directional-insertions $outfolder/tmp/tmp.tedirectional --min-dist 85 --max-dist 400 --output $outfolder/tmp/tmp.teinsertions --poly-n $outfolder/tmp/polyn.gtf --te-hierarchy $hier > /dev/null
 # estimate poly
 
-perl $popte/estimate-polymorphism.pl --sam-file mapte/Dsim/Dsim.sort.sam --te-insert-file te/Dsim/raw/Dsim.teinsertions --te-hierarchy-file ~dmau/refg/Dsim/Dsim-combinedte-incM.hier --te-hierarchy-level family --min-map-qual 15 --output $outfolder/tmp/tmp.polytes > /dev/null
+perl $popte/estimate-polymorphism.pl --sam-file $sam --te-insert-file $outfolder/tmp/tmp.teinsertions --te-hierarchy-file $hier --te-hierarchy-level family --min-map-qual 15 --output $outfolder/tmp/tmp.polytes > /dev/null
 
 # filter major chromosome 
 cat $outfolder/tmp/tmp.polytes |awk '$1=="X" || $1=="2L" || $1=="2R" || $1=="3L" || $1=="3R" || $1=="4"' > $outfolder/tmp/tmp.euchr.polytes
