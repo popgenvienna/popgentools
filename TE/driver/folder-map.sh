@@ -15,7 +15,7 @@ outfolder=$2
 reference=$3
 
 # settings
-samro="/Volumes/Temp2/Robert/popoolationte/samro.pl"
+samro=${popte}/samro.pl"
 
 
 # folders

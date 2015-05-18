@@ -13,7 +13,7 @@ source ~/.zshrc
 set -o shwordsplit
 
 sam=$1
-genomedir="/Volumes/Temp/Robert/ee-pele/refg/pelement/gsnap"
+genomedir=$genomepelementgsnap
 outfolder=$2
 prefix=$3
 
@@ -22,8 +22,8 @@ echo "using outfolder ${outfolder}"
 echo "using prefix ${prefix}"
 
 # set paths
-pgt="/Volumes/Temp2/Robert/popgentools"
-popte="/Volumes/Temp2/Robert/popoolationte"
+#pgt use environment variable
+#popte use environment variable
 
 s2f="${pgt}/TE/melsim/sam2fastq.py"
 
