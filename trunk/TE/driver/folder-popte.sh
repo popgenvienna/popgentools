@@ -14,7 +14,7 @@ outfolder=$2
 genome=$3
 
 # settings 
-pgt="/Volumes/Temp2/Robert/popgentools"
+# pgt from environment
 
 
 # folders

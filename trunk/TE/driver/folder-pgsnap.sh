@@ -15,7 +15,7 @@ outfolder=$2
 
 
 # settings 
-pgt="/Volumes/Temp2/Robert/popgentools"
+# pgt from environment
 mkdir -p $outfolder
 
 # paths

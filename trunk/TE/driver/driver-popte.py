@@ -28,8 +28,8 @@ echo "using prefix ${prefix}"
 echo "using bootstrap ${bootstrap}"
 
 # set paths
-pgt="/Volumes/Temp2/Robert/popgentools"
-popte="/Volumes/Temp2/Robert/popoolationte"
+#pgt
+#popte
 
 # make folders
 mkdir -p $outfolder
