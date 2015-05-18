@@ -15,7 +15,7 @@ outfolder=$2
 reference=$3
 
 # settings
-samro="perl /Volumes/Temp2/Robert/popoolationte/samro.pl"
+samro="/Volumes/Temp2/Robert/popoolationte/samro.pl"
 
 
 # folders
