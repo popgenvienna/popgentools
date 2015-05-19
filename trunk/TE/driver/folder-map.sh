@@ -15,7 +15,7 @@ outfolder=$2
 reference=$3
 
 # settings
-samro=${popte}/samro.pl"
+samro=${popte}/samro.pl
 
 
 # folders

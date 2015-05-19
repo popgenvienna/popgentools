@@ -4,6 +4,7 @@ def rc(seq):
         seq_dict = {'A':'T','T':'A','G':'C','C':'G','N':'N'}
         return "".join([seq_dict[base] for base in reversed(seq)])
 
+c=1
 for l in open(sys.argv[1]):
         """
         HWUSI-EAS300R:5:6:1167:1537#0	73	PPI251	1	140	74M	*	0	0	CATGATGAAATAACATAAGGTGGTCCCGTCGATAGCCGAAGCTTACCGAAGTATACACTTAAATTCAGTGCACG	a`bbabbab^b_babbbabbab`aaaabaab^babbba\ab`aaaaaa]a`[aaa`]`aaZaa`b^``Ya`XZ\	AS:i:70
@@ -16,7 +17,7 @@ for l in open(sys.argv[1]):
         """
         l=l.rstrip("\n")
         a=l.split("\t")
-        readid=a[0]
+        readid=a[0]+str(c)
         flag=int(a[1])
         seq=a[9]
         qual=a[10]
@@ -27,6 +28,7 @@ for l in open(sys.argv[1]):
         print seq
         print "+{0}".format(readid)
         print qual
+	c+=1
                 
         
         
