@@ -13,7 +13,7 @@ source ~/.zshrc
 set -o shwordsplit
 
 sam=$1
-genomedir=$genomepelementgsnap
+genomefile=$genomepelementbwa
 outfolder=$2
 prefix=$3
 
@@ -26,6 +26,7 @@ echo "using prefix ${prefix}"
 #popte use environment variable
 
 s2f="${pgt}/TE/melsim/sam2fastq.py"
+c2ss="${pgt}/TE/melsim/chimera2splicesam.py
 
 # make folders
 mkdir -p $outfolder
@@ -35,9 +36,10 @@ mkdir -p $outfolder/raw
 
 samtools index $sam
 samtools view $sam PPI251 > $outfolder/raw/tmp.sam
-python $s2f --sam $outfolder/raw/tmp.sam > $outfolder/raw/tmp.fastq
-co1="gsnap -d pele -D ${genomedir} -A sam --novelsplicing=1 -t 4 --quality-protocol illumina ${outfolder}/raw/tmp.fastq | samtools view -Sb - |samtools sort - ${outfolder}/${prefix}.sort"
-eval $co1
+python $s2f --count --sam $outfolder/raw/tmp.sam > $outfolder/raw/tmp.fastq
+co1="bwa bwasw -t 8 $genomefile $outfolder/raw/tmp.fastq> $outfolder/raw/tmp.sam"
+eval co1
+python $c2ss -sam $outfolder/raw/tmp.sam |samtools view -T $genomefile -Sb - |samtools sort - ${outfolder}/${prefix}.sort
 
 samtools index $outfolder/${prefix}.sort.bam
 rm -rf $outfolder/raw
