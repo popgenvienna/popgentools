@@ -1,10 +1,10 @@
 #!/bin/zsh
 # read parameters
-if [ $# -ne 3 ]
+if [ $# -ne 4 ]
   # "$#" is number of parameters- here we test
   # whether it is not equal to two
    then
-   echo "Usage $0 input.bam outputdirname prefix"
+   echo "Usage $0 input.bam outputdirname prefix quality"
 exit 2
 fi
 
@@ -12,14 +12,17 @@ fi
 source ~/.zshrc
 set -o shwordsplit
 
+
 sam=$1
 genomedir=$genomepelementgsnap
 outfolder=$2
 prefix=$3
+quality=$4
 
 echo "using bam ${sam}"
 echo "using outfolder ${outfolder}"
 echo "using prefix ${prefix}"
+echo "using quality ${quality}"
 
 # set paths
 #pgt use environment variable
@@ -36,7 +39,7 @@ mkdir -p $outfolder/raw
 samtools index $sam
 samtools view $sam PPI251 > $outfolder/raw/tmp.sam
 python $s2f --sam $outfolder/raw/tmp.sam > $outfolder/raw/tmp.fastq
-co1="gsnap -d pele -D ${genomedir} -A sam --novelsplicing=1 -t 4 --quality-protocol illumina ${outfolder}/raw/tmp.fastq | samtools view -Sb - |samtools sort - ${outfolder}/${prefix}.sort"
+co1="gsnap -d pele -D ${genomedir} -A sam --novelsplicing=1 -t 4 --quality-protocol ${quality} ${outfolder}/raw/tmp.fastq | samtools view -Sb - |samtools sort - ${outfolder}/${prefix}.sort"
 eval $co1
 
 samtools index $outfolder/${prefix}.sort.bam
