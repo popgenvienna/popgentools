@@ -1,22 +1,22 @@
-
+import re
 
 
 class PTruncCollection:
 	def __init__(self,sams):
-		self.__sams=sams
+		self.sams=sams
 	
 	def sams(self):
-		return self.__sams
+		return self.sams
 	
 	def get_truncations(self):
 		truncs=[]
-		for s in self.__sams:
+		for s in self.sams:
 			truncs.extend(s.get_truncations())
 		return truncs
 	
 	def get_genomicfragments(self):
 		frags=[]
-		for s in self.__sams:
+		for s in self.sams:
 			frags.extend(s.get_genomefragments())
 		return frags
 	
@@ -26,7 +26,7 @@ class PTruncCollection:
 		cov=[0]*2908
 		for i in tmp:
 			start=i[0]
-			e=i[1]
+			end=i[1]
 			for k in range(start,end+1):
 				cov[k]+=1
 		return cov
@@ -54,21 +54,25 @@ class PTruncSamEntry:
 				continue
 			a=l.rstrip("\n").split("\t")
 			# FCC4M7EACXX:2:2101:4216:63007#CGATGTAT	0	PPI251	1	40	100M	*	0	0	CATGATGAAATAACATAAGGTGGTCCCGTCGAAAGCCGAAGCTTACCGAAGTATACACTTAAATTCAGTGCACGTTTGCTTGTTGAGAGGAAAGGTTGTG	@@@DDDDDDBHFGIDGIIIG<CD@EGHIFGHGEHIGGIIEGHHCDGHG8B;CAHHAHEHFFFFFFEDECCCCDDDBDDDDDDDDD@A<C?8<9AB(:?B<	MD:Z:100	NH:i:1	HI:i:1	NM:i:0	SM:i:40	XQ:i:40	X2:i:0	XO:Z:UU	XG:Z:A
+			
 			chr=a[2]
 			start=int(a[3])
 			cig=a[5]
-			s=PTruncSamEntry(chr,start,cigar)
+			if cig=="*" or chr=="*":
+				continue
+			s=PTruncSamEntry(chr,start,cig)
+			toret.append(s)
 			
 		return PTruncCollection(toret)	
 	
 	
 	def __init__(self,chr,start,cigar):
 		if chr !="PPI251":
-			raise Exception("read not mapping to the P-element")
+			raise Exception("read not mapping to the P-element {0}".format(chr))
 		self.__start=start
 		self.__cigar=cigar
 		pe=[]
-		for fi in re.finditer(r"(\d+)([HSIDMN])", cig):
+		for fi in re.finditer(r"(\d+)([HSIDMN])", cigar):
 			num=int(fi.group(1))
 			id=fi.group(2)
 			pe.append((num,id))
@@ -122,7 +126,7 @@ class PTruncSamEntry:
 				pass
 			else:
 				raise Exception("unknown cigar"+id)
-		return truncations
+		return fragments
 
 	def end(self):
 		end=self.__start

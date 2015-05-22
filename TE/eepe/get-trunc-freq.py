@@ -15,10 +15,9 @@ parser = OptionParser()
 parser.add_option("--sam",dest="sam",help="the input file as sam")
 parser.add_option("--bound",dest="bound",help="the coverage bound")
 (options, args) = parser.parse_args()
-samh=load_samhash(options.sam)
 
-s=truncsamlib.PTruncSamEntry(options.sam)
-avc=s.get_averagecoverage(int(optionbs.bound)
+s=truncsamlib.PTruncSamEntry.load(options.sam)
+avc=s.get_averagecoverage(int(options.bound))
 truncs=s.get_truncations()
 
 tc=collections.defaultdict(lambda:0)
