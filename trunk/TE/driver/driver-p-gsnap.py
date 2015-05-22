@@ -9,7 +9,6 @@ exit 2
 fi
 
 
-source ~/.zshrc
 set -o shwordsplit
 
 
@@ -23,6 +22,7 @@ echo "using bam ${sam}"
 echo "using outfolder ${outfolder}"
 echo "using prefix ${prefix}"
 echo "using quality ${quality}"
+echo "using debug ${debug}"
 
 # set paths
 #pgt use environment variable
@@ -39,10 +39,20 @@ mkdir -p $outfolder/raw
 samtools index $sam
 samtools view $sam PPI251 > $outfolder/raw/tmp.sam
 python $s2f --sam $outfolder/raw/tmp.sam > $outfolder/raw/tmp.fastq
-co1="gsnap -d pele -D ${genomedir} -A sam --novelsplicing=1 -t 4 --quality-protocol ${quality} ${outfolder}/raw/tmp.fastq | samtools view -Sb - |samtools sort - ${outfolder}/${prefix}.sort"
+co1="gsnap -d pele -D ${genomedir} -A sam --novelsplicing=1 -t 4 --quality-protocol ${quality} ${outfolder}/raw/tmp.fastq > $outfolder/raw/tmpgsnap.sam" 
+if [ $debug >0 ]
+then
+echo $co1
+fi 
 eval $co1
 
-samtools index $outfolder/${prefix}.sort.bam
-rm -rf $outfolder/raw
 
+samtools view -Sb  $outfolder/raw/tmpgsnap.sam |samtools sort - ${outfolder}/${prefix}.sort
+
+samtools index $outfolder/${prefix}.sort.bam
+
+if [ $debug -lt 1 ] 
+then 
+rm -rf $outfolder/raw
+fi
 

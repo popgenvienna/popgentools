@@ -8,7 +8,6 @@ if [ $# -lt 2 ]
 exit 2
 fi
 
-source ~/.zshrc
 infolder=$1
 outfolder=$2
 q=$3
