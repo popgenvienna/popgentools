@@ -27,7 +27,7 @@ do
 	subdir="${outfolder}/${prefix}/p_bwa"
 	mkdir -p $subdir	
 	# Usage driver-popte.py input.[sam/bam] genome.fasta outputdirname prefix
-	torun="zsh ${pgt}/TE/driver/driver-p-bwa.py ${f} ${subdir} ${prefix}"
+	torun="zsh ${pgt}/TE/driver/driver-p-bwa.sh ${f} ${subdir} ${prefix}"
 	echo $torun
 	eval $torun
 done

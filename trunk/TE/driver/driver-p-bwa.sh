@@ -26,7 +26,7 @@ echo "using prefix ${prefix}"
 #popte use environment variable
 
 s2f="${pgt}/TE/melsim/sam2fastq.py"
-c2ss="${pgt}/TE/melsim/chimera2splicesam.py
+c2ss="${pgt}/TE/melsim/chimera2splicesam.py"
 
 # make folders
 mkdir -p $outfolder
