@@ -18,7 +18,7 @@ outfolder=$3
 prefix=$4
 temp1=${genome%.fasta}
 hier=${temp1}.hier
-bootstrap="25 50 75 100 125 150 200"
+bootstrap="2 25 50 60 75 100 125 150 200"
 
 echo "using sam ${sam}"
 echo "using genome ${genome}"
