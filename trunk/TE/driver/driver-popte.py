@@ -18,7 +18,7 @@ outfolder=$3
 prefix=$4
 temp1=${genome%.fasta}
 hier=${temp1}.hier
-bootstrap="2 25 50 60 75 100 125 150 200"
+bootstrap="25 50 60 75 100 125 150 200"
 
 echo "using sam ${sam}"
 echo "using genome ${genome}"
@@ -82,6 +82,12 @@ stat2="perl ${pgt}/TE/mapstatdebug/debugstat-presFrag-familywise.pl --input ${sa
 eval $stat2
 python $pgt/TE/mapstatdebug/insertcount-famwise.py --tes $outfolder/results/${prefix}.mc10.euchr.polytes > $outfolder/stat/${prefix}.mc10.euchr.inscount.txt
 python $pgt/TE/mapstatdebug/insertcount-famwise.py --tes $outfolder/results/${prefix}.mc10.nooverlap.euchr.polytes > $outfolder/stat/${prefix}.mc10.nooverlap.euchr.inscount.txt
+
+# mincount 2 statistics
+perl $pgt/TE/filter/filter-teinserts.pl --te-insertions $outfolder/tmp/tmp.euchr.polytes --min-count 2 --output $outfolder/tmp/${prefix}.mc2.euchr.polytes
+python $pgt/TE/mapstatdebug/insertcount-famwise.py --tes $outfolder/tmp/${prefix}.mc2.euchr.polytes > $outfolder/stat/${prefix}.mc2.euchr.inscount.txt
+
+
 
 #clean 
 rm $outfolder/tmp/input.sam
