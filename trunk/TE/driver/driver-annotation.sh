@@ -15,6 +15,7 @@ prefix=$3
 # set paths
 repeatmasker="/Users/robertkofler/programs/RepeatMasker/RepeatMasker"
 repeatseq="/Volumes/Volume_4/analysis/male-female-te/resources/te-dmel-dsim-dmau/teseq-dmds-ur.fasta"
+#repeatseq="/Volumes/Volume_4/analysis/PopTE2/analysis/2015-11-walkthrough/prerequisites/annorun/teseqs.txt"
 repeathier="/Volumes/Volume_4/analysis/male-female-te/resources/te-dmel-dsim-dmau/tehier-dmds-ur.txt"
 sciroko="/Users/robertkofler/programs/SciRoKoCo/SciRoKoCo.exe"
 pgt="/Users/robertkofler/dev/popgentools"
