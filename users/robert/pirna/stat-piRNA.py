@@ -100,12 +100,16 @@ r2	0	M14653_te	240	70	27M	*	0	0	AACAGCTGCGGAATCGCACCGAATGCT	BBBBBFFFFFBFFFFFFFFF
 #mirnald=collections.defaultdict(lambda:0)
 #trnald=collections.defaultdict(lambda:0)
 #rrnald=collections.defaultdict(lambda:0)
+
+teprintlist=["1360","412","ACCORD","AF222049","AF418572","AF541951","BAGGINS","BLOOD","BS","BS3","BS4","Beagle","Beagle2","CIRC","DIVER2","DM06920","DM23420","DM33463","DM88","DMAURA","DMBARI1","DMBLPP","DMCOPIA","DMCR1A","DMDM11","DME010298","DME278684","DME487856","DME542581","DME9736","DMGYPF1A","DMHFL1","DMIFACA","DMIS176","DMIS297","DMLINEJA","DMMDG3","DMREPG","DMRER1DM","DMRER2DM","DMRTMGD1","DMTHB1","DMTN1731","DMTNFB","DMTOM1_LTR","DMTRDNA","DMU89994","DMW1DOC","DMZAM","DM_ROO","DOC2","DOC3","DOC4","DOC5","F","FB","FROGGER","FW2","FW3","G2","G3","G4_DM","G5A","G5_DM","G6_DM","G7","GTWIN","GYPSY10","GYPSY11","GYPSY12","GYPSY2","GYPSY3","GYPSY4","GYPSY5","GYPSY6","GYPSY7","GYPSY8","GYPSY9","HEL","HOPPER2","INE1","INVADER","INVADER2","INVADER3","INVADER4","INVADER5","INVADER6","IVK","JOCKEY2","JUAN","LOOPER1_DM","M14653","MARINER2","McCLINTOCK","OPUS","OSV","PPI251","Q","QBERT","QUASIMODO","R1-2","ROOA_LTR","ROVER","ROXELEMENT","RT1B","RT1C","S2","SPRINGER","STALKER","STALKER2","STALKER3","STALKER4","TABOR","TC1","TC1-2","TC3","TIRANT","TRANSIB1","TRANSIB2","TRANSIB3","TRANSIB4","Tinker"]
+
  
 print "{0}\t{1}\t{2}".format("gen","tecount",tesum)    
 print "{0}\t{1}\t{2}".format("gen","mirnacount",mirnacount)
 print "{0}\t{1}\t{2}".format("gen","trnacount",trnacount)
 print "{0}\t{1}\t{2}".format("gen","rrnacount",rrnacount)   
-for te,count in tecount.items():
+for te in teprintlist:
+     count=tecount[te]
      print "{0}\t{1}\t{2}".format("teabundance",te,count)        
 for tel in sorted(teld.keys()):
      count=teld[tel]
