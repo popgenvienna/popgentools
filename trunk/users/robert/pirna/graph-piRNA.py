@@ -95,7 +95,7 @@ r2	0	M14653_te	240	70	27M	*	0	0	AACAGCTGCGGAATCGCACCGAATGCT	BBBBBFFFFFBFFFFFFFFF
      elif ref.endswith("_tRNA"):
           trnald[readlen]+=1
           trnacount+=1
-     elif  ref.endswith("_snoRNA;") or ref.endswith("_snoRNA") or ref.endswith("_snRNA;") or ref.endswith("_snRNA"):
+     elif  ref.endswith("_snoRNA;") or ref.endswith("_snoRNA") or ref.endswith("_snRNA;") or ref.endswith("_snRNA") or ref.endswith("_mRNA"):
           pass
      else:
           raise Exception("Unknown sequence end "+ ref)
