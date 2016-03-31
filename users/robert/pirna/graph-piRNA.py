@@ -18,6 +18,9 @@ Description
 Summary statistics
 """,formatter_class=argparse.RawDescriptionHelpFormatter,
 epilog="""
+miRNA: 21-23nt
+piRNA: 23-28nt
+
 
 Authors
 -------
@@ -31,6 +34,12 @@ args = parser.parse_args()
 minmq=args.minmq
 maxmm=args.maxmm
 
+
+mistart=21
+miend=23
+pistart=23
+piend=28
+
 tecount=collections.defaultdict(lambda:0)
 tesum=0
 mirnacount=0
@@ -40,7 +49,6 @@ rrnacount=0
 
 ps=collections.defaultdict(lambda:0)
 pas=collections.defaultdict(lambda:0)
-
 
 
 for line in args.sam:
@@ -76,9 +84,8 @@ r2	0	M14653_te	240	70	27M	*	0	0	AACAGCTGCGGAATCGCACCGAATGCT	BBBBBFFFFFBFFFFFFFFF
      readlen=len(a[9])
      if ref.endswith("_te"):
           teseq=ref[:-3]
-          teld[readlen]+=1
-          tecount[teseq]+=1
-          tesum+=1
+          if readlen<pistart or readlen>piend:
+               continue
           if teseq=="PPI251":
                start=int(a[3])
                if flag& 0x10:
@@ -87,13 +94,12 @@ r2	0	M14653_te	240	70	27M	*	0	0	AACAGCTGCGGAATCGCACCGAATGCT	BBBBBFFFFFBFFFFFFFFF
                     ps[start]+=1
                     
      elif ref.endswith("_miRNA"):
-          mirnald[readlen]+=1
+          if readlen<mistart or readlen>mistart:
+               continue
           mirnacount+=1
      elif ref.endswith("_rRNA") or  ref.endswith("_rRNA;"):
-          rrnald[readlen]+=1
           rrnacount+=1
      elif ref.endswith("_tRNA"):
-          trnald[readlen]+=1
           trnacount+=1
      elif  ref.endswith("_snoRNA;") or ref.endswith("_snoRNA") or ref.endswith("_snRNA;") or ref.endswith("_snRNA") or ref.endswith("_mRNA"):
           pass
