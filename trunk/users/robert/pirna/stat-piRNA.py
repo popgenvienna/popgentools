@@ -170,5 +170,5 @@ for rrl in sorted(rrnald.keys()):
 for ml in sorted(mrnald.keys()):
      count=mrnald[ml]
      ascount=asmrnald[ml]
-     print "{0}\t{1}\t{2}\t{3}".format("rrna-ld",ml,count,ascount)      
+     print "{0}\t{1}\t{2}\t{3}".format("mrna-ld",ml,count,ascount)      
 
