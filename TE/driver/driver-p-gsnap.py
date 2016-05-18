@@ -40,7 +40,7 @@ samtools index $sam
 samtools view $sam PPI251 > $outfolder/raw/tmp.sam
 python $s2f --sam $outfolder/raw/tmp.sam > $outfolder/raw/tmp.fastq
 co1="gsnap -d pele -D ${genomedir} -A sam --novelsplicing=1 -t 4 --quality-protocol ${quality} ${outfolder}/raw/tmp.fastq > $outfolder/raw/tmpgsnap.sam" 
-if [ $debug >0 ]
+if [ $debug -gt 0 ]
 then
 echo $co1
 fi 
