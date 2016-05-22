@@ -8,6 +8,7 @@ import random
 import math
 import collections
 import fileinput
+prog = re.compile(r"(\d+)([MISDHN])")
 
 
 
@@ -50,6 +51,19 @@ rrnacount=0
 ps=collections.defaultdict(lambda:0)
 pas=collections.defaultdict(lambda:0)
 
+def get_end(start,cig):
+     
+     result = re.findall(prog,cig)
+     alignmentleng=0
+     for count,cigchar in result:
+          count=int(count)
+          if cigchar=="M" or cigchar=="D":
+               alignmentleng+=count
+     
+     end=start+alignmentleng-1
+     return end
+          
+
 
 for line in args.sam:
      """
@@ -89,7 +103,9 @@ r2	0	M14653_te	240	70	27M	*	0	0	AACAGCTGCGGAATCGCACCGAATGCT	BBBBBFFFFFBFFFFFFFFF
           if teseq=="PPI251":
                start=int(a[3])
                if flag& 0x10:
-                    pas[start]+=1
+                    # reverse complement if flag 0x10 is set
+                    end=get_end(start,a[5]) # for reverse complements get the end
+                    pas[end]+=1
                else:
                     ps[start]+=1
                     
@@ -106,16 +122,49 @@ r2	0	M14653_te	240	70	27M	*	0	0	AACAGCTGCGGAATCGCACCGAATGCT	BBBBBFFFFFBFFFFFFFFF
      else:
           raise Exception("Unknown sequence end "+ ref)
 
+# normalize
+for start in ps.keys():
+     count= ps[start]
+     normcount=float(count)/float(mirnacount)
+     normcount*=1000000
+     ps[start]=normcount
+
+
+for start in pas.keys():
+     count=pas[start]
+     normcount=float(count)/float(mirnacount)
+     normcount*=1000000
+     pas[start]=normcount
+
+
+ppsig=collections.defaultdict(lambda:0)
+
+# compute ping-pong signatures
+for start in pas.keys():
+     # start with antisense:
+     assig=pas[start]
+     sensestart=start-9 # sift of Ago3
+     sensesig=0.0
+     if(sensestart in ps):
+          sensesig=ps[sensestart]
+     pps=assig*sensesig
+     if pps>0.0:
+          ppsig[start]=pps
+
+
+
 sid=args.sid
 for start,count in ps.items():
      normcount=float(count)/float(mirnacount)
      normcount*=1000000
-     print "{0}\t{1}\t{2}\t{3}".format(sid,start,count,normcount)
+     print "{0}\t{1}\t{2}\t{3}".format(sid,"s",start,normcount)
 
 for start,count in pas.items():
-     normcount=float(count)/float(mirnacount)
-     normcount*=1000000
-     print "{0}\t{1}\t{2}\t{3}".format(sid,start,-count,-normcount)
+     print "{0}\t{1}\t{2}\t{3}".format(sid,"s",start,-count)
+
+for start,count in ppsig.items():
+     print "{0}\t{1}\t{2}\t{3}".format(sid,"pp",start,count)
+
 
 #tecount=collections.defaultdict(lambda:0)
 #tesum=0
