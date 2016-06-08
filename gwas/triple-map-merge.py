@@ -103,7 +103,7 @@ class MeasureReader:
 		a=line.split("\t")
 		chr,pos,measure=a[0],a[1],a[self.__col]
 		if(self.__trim!=""):
-			measure=measure.lstrip(self.__trim)
+			measure=re.sub(self.__trim,"",measure)
 		return Measure(chr,int(pos),float(measure))
 
 def get_chrset(chr):
