@@ -32,12 +32,14 @@ class MeasureReader:
 	
 	"""
 	# chrset,args.col,args.trim
-	def __init__(self,file,col,trim):
+	def __init__(self,file,col,trim,debug):
 		self.__filename=file
 		self.__filehandle=open(file,"r")
 		self.__col=col
 		self.__trim=trim
 		self.__buffer=[]
+		self.__debug=debug
+		self.__activechr=None
 
 	def __iter__(self):
 		return self
@@ -50,6 +52,7 @@ class MeasureReader:
 	    
 	
 	def spool2chr(self,chr):
+		passed=set([])
 		while(True):
 			try:
 				test=self.next()
@@ -57,7 +60,12 @@ class MeasureReader:
 				return False
 			if(test.chr==chr):
 				self.buffer(test)
+				self.__activechr=chr
 				return True
+			elif(self.__debug):
+				if test.chr not in passed:
+					print "Spooling "+test.chr
+					passed.add(test.chr)
 		return False
 	
 	def get_pos(self,pos):
@@ -66,11 +74,12 @@ class MeasureReader:
 				test=self.next()
 			except StopIteration:
 				return None
-			if(test.pos==pos):
+			if(test.pos==pos and test.chr==self.__activechr):
 				return test
-			elif(test.pos>pos):
+			elif(test.pos>pos or test.chr != self.__activechr):
 				self.buffer(test)
 				return None
+
 		return None
 
 
@@ -173,12 +182,14 @@ parser.add_argument("--map1", type=str, required=True, dest="map1", default=None
 parser.add_argument("--map2", type=str, required=True, dest="map2", default=None, help="Results of mapper 2")
 parser.add_argument("--map3", type=str, required=True, dest="map3", default=None, help="Results of mapper 3")
 parser.add_argument("--take", type=str, required=False, dest="take", default="small", help="the minimum coverage [map1 | map2 | map3 | small | large]")
-parser.add_argument("--chromosomes", type=str, required=False, dest="chr", default="X,2L,2R,3L,3R", help="Report results for the given comma separated list of chromosomes")
+parser.add_argument("--chromosomes", type=str, required=False, dest="chr", default="X,2L,2R,3L,3R,4", help="Report results for the given comma separated list of chromosomes")
 parser.add_argument("--column", type=int, required=False, dest="col", default="-1", help="Which column should be used for merging? Counting starts at zero and -1 means last column, -2 the one before the last etc")
 parser.add_argument("--trim", type=str, required=False, dest="trim", default="", help="Remove the given string at the start of chosen column, e.g.: '1:2=' may be provided when using PoPoolation2")
 parser.add_argument("--output", type=str, required=True, dest="output", default=None, help="The output file")
+parser.add_argument("--debug", required=False, dest="debug", default=False, action="store_true", help="The output file")
 args = parser.parse_args()
 
+debug=args.debug
 chrset=get_chrset(args.chr)
 
 print "Reading first input file to determine order and size of the major chromosomes: "+args.map1
@@ -188,9 +199,9 @@ print "Done, will use sort order of chromosomes "+str(chrorder)
 
 take=args.take
 
-mr1=MeasureReader(args.map1,args.col,args.trim)
-mr2=MeasureReader(args.map2,args.col,args.trim)
-mr3=MeasureReader(args.map3,args.col,args.trim)
+mr1=MeasureReader(args.map1,args.col,args.trim,debug)
+mr2=MeasureReader(args.map2,args.col,args.trim,debug)
+mr3=MeasureReader(args.map3,args.col,args.trim,debug)
 
 mc=get_measure(args.take)
 
